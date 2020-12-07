@@ -45,3 +45,74 @@ function addRandomFact() {
     const factContainer = document.getElementById('fact-container');
     factContainer.innerText = fact;
 }
+
+function toggleButton() {
+    const toggleContainer = document.getElementById("toggle-container");
+    if (toggleContainer.style.display === "block") {
+        toggleContainer.style.display = "none";
+    }
+    else {toggleContainer.style.display = "block";}
+}
+
+/**
+ * Display my hobbies
+ */
+function getHobbies() {
+    const hobbies = [
+        'photography',
+        'dance',
+        'video games',
+        'gym & yoga',
+        'cooking'
+    ];
+
+    //Add them to the page
+    const aboutMeContainer = document.getElementById('about-me-container');
+    text = "<h3>My hobbies:</h3> <ul>";
+    for (i = 0; i < hobbies.length; i++) {
+        text += "<li>" + hobbies[i] + "</li>"
+    }
+    text += "</ul>"
+    aboutMeContainer.innerHTML = text;
+    
+}
+
+/**
+ * Display what I love
+ */
+function getLoves() {
+    const loves = [
+        'dogs (especially corgis, and I have one!)',
+        'movies/series (favourite genre: romantic & comedy)',
+        'books (favourite genre: romance & self-help)',
+        'fashion',
+        'my planner (keep me organised!)'
+    ];
+
+    //Add them to the page
+    const lovesContainer = document.getElementById('about-me-container');
+    text = "<h3>What I love: </h3> <ul>";
+    for (i = 0; i < loves.length; i++) {
+        text += "<li>" + loves[i] + "</li>"
+    }
+    text += "</ul>"
+    lovesContainer.innerHTML = text;
+}
+
+/**
+ * Display what I hate
+ */
+function getHates() {
+    const hates = [
+        'mess (so I\'m usually quite organised!)'
+    ];
+
+    //Add them to the page
+    const hatesContainer = document.getElementById('about-me-container');
+    text = "<h3>What I hate: </h3> <ul>";
+    for (i = 0; i < hates.length; i++) {
+        text += "<li>" + hates[i] + "</li>"
+    }
+    text += "</ul>"
+    hatesContainer.innerHTML = text;
+}

@@ -8,49 +8,112 @@
   </head>
 
   <body>
-    <div id="content">
-      <h1>My Portfolio</h1>
-      <h2>More about me</h2>
-      <p>My name is Helena and I am a Google STEP intern. I was born in New Caledonia (so I'm French!) but I have Chinese and Vietnamese background.</p>
-      <p>I arrived in Sydney in 2017 to start a double degree (Software Engineering and Finance) at UTS.</p>
-      <h2>What makes me me?</h2>
-      <p>My hobbies, my surrounding and what I love and hate probably make me what I am.</p>
-      <h3>My hobbies: </h3>
-      <ul>
-          <li>photography</li>
-          <li>dance</li>
-          <li>video games</li>
-          <li>gym & yoga</li>
-          <li>cooking</li>
-      </ul>
-      <h3>What I love: </h3>
-      <ul>
-          <li>dogs (especially corgis!!)</li>
-          <li>food</li>
-          <li>movie/series (favourite genre: romantic & comedy)</li>
-          <li>books (favourite genre: romance & self-help)</li>
-          <li>fashion</li>
-          <li>my planner (keep me organised!)</li>
-      </ul>
-      <h3>What I hate: </h3>
-      <ul>
-          <li>mess (so I'm usually quite organised!)</li>
-      </ul> 
-      <h2>My life and interests in pictures</h2>
-      <div class="image-gallery">
-          <img src="images/23810.jpg"/>
-          <img src="images/83099.jpg"/>
-          <img src="images/IMG-0127.JPG"/>
-      </div>
-      
-
-      <p>Click here to get a random message:</p>
-      <button onclick="addRandomGreeting()">Hello</button>
-      <div id="greeting-container"></div>
-
-      <p>Click here to get a random fact about me:</p>
-      <button onclick="addRandomFact()">Fact</button>
-      <div id="fact-container"></div>
+    <div class="header">
+        <h1>My Portfolio</h1>
     </div>
+    <div class="content">
+        <div class="column side"></div>
+        <div class="column middle">
+            <div class="random-greetings-container">
+            <button onclick="addRandomGreeting()">Say hi to me</button>
+            : <span id="greeting-container"></span>
+            </div>
+
+            <h2>More about me</h2>
+            <p>My name is Helena and I am a Google STEP intern. I was born in New Caledonia (so I'm French!) but I have Chinese and Vietnamese background.</p>
+            <p>I arrived in Sydney in 2017 to start a double degree (Software Engineering and Finance) at UTS.</p>
+            <h2>What makes me me?</h2>
+            <p>My hobbies, my surrounding and what I love and hate probably make me what I am.</p>
+            <div>
+                <button type="button" onClick="getHobbies()">My hobbies</button>
+                <button type="button" onClick="getLoves()">What I love</button>
+                <button type="button" onClick="getHates()">What I hate</button>
+            </div>
+            <div id="about-me-container"></div>
+
+            <h2>My life and interests in pictures</h2>
+            <div class="image-gallery">
+                <img src="images/23810.jpg"/>
+                <img src="images/83099.jpg"/>
+                <img src="images/IMG-0127.JPG"/>
+                <img src="images/45135.jpg"/>
+                <img src="images/APC-0294.JPG"/>
+                <img src="images/IMG-0255.JPG"/>
+                <img src="images/IMG-1609.JPG"/>
+            </div>
+
+            <h2>My Projects</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Project name</th>
+                        <th>Project description</th>
+                        <th>Project link</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Mar 2018 - Jun 2018</td>
+                        <td>Movie Kiosk Software</td>
+                        <td>Part of the subject Application Programming at UTS (individual project). 
+                            Created using GUI and Java. Enable customers to browse, 
+                            rent and return movies.</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>Mar 2019 - Jun 2019</td>
+                        <td>Directed Graph Structure with Algorithms</td>
+                        <td>Part of the subject Data Structure and Algorithms at UTS (individual project). 
+                            Created using C++.</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>Jul 2019 - Oct 2019</td>
+                        <td>E-shop - Computer devices</td>
+                        <td>Part of the subject Software Engineering Studio 1A at UTS (group project). 
+                            Created using Angular (HTML, CSS, JavaScript). Enable customers to search,
+                            browse and buy computer devices.</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>Mar 2020 - Jun 2020</td>
+                        <td>Electrical Forecast Database</td>
+                        <td>Part of the subject Database Programming at UTS (individual project). 
+                            Created using PL/SQL. Enable to do a daily forecast of around 50,000 engery requirements.</td>
+                        <td></td>
+                        </tr>
+                    <tr>
+                        <td>Jul 2020 - Oct 2020</td>
+                        <td>E-Library System</td>
+                        <td>Part of the subject Software Engineering Studio 1B at UTS (group project). 
+                            Created using Ruby on Rails. Enable users to browse, borrow, return and renew e-books</td>
+                        <td><a href="https://github.com/helenatran/e-library">GitHub</a></td><
+                        </tr>
+                    <tr>
+                        <td>Jul 2020 - Oct 2020</td>
+                        <td>IOU - favour exchange website</td>
+                        <td>Part of the subject Advanced Internet Programming at UTS (group project). 
+                            Created using MERN (MongoDB, Express, React, Node.js). Enable users to record favours owed among friends</td>
+                        <td><a href="https://github.com/helenatran/iou">GitHub</a></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h2>Connect with me</h2>
+            <ul>
+                <li><a href="https://au.linkedin.com/in/helenaelisabethtran">LinkedIn</a></li>
+                <li><a href="https://github.com/helenatran">GitHub</a></li>
+            </ul>
+
+            <h2>Get a fact about me: </h2>
+            <div>
+                <button onclick="addRandomFact()">Fun Fact</button> : 
+                <span id="fact-container"></span>
+            </div>
+        </div>
+        <div class="column side"></div>
+    </div>
+    <div class="footer"></div>
   </body>
 </html>
