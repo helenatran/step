@@ -32,10 +32,10 @@ function addRandomGreeting() {
  */
 function addRandomFact() {
     const facts = [
-        'I am French',
-        'I am from New Caledonia',
         'I am a foodie',
-        'I have a collection of Starbucks mugs'
+        'I have a collection of Starbucks mugs',
+        'I have a collection of "I LOVE" T-shirt from around the world',
+        'I have travelled in over 15 different countries'
     ];
 
     //Pick a random fact
@@ -44,14 +44,6 @@ function addRandomFact() {
     //Add it to the page
     const factContainer = document.getElementById('fact-container');
     factContainer.innerText = fact;
-}
-
-function toggleButton() {
-    const toggleContainer = document.getElementById("toggle-container");
-    if (toggleContainer.style.display === "block") {
-        toggleContainer.style.display = "none";
-    }
-    else {toggleContainer.style.display = "block";}
 }
 
 /**
