@@ -35,7 +35,7 @@ function addRandomFact() {
         'I am a foodie',
         'I have a collection of Starbucks mugs',
         'I have a collection of "I LOVE" T-shirt from around the world',
-        'I have travelled in over 15 different countries'
+        'I have travelled to over 15 different countries'
     ];
 
     //Pick a random fact
