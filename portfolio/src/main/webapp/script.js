@@ -46,6 +46,10 @@ function addRandomFact() {
     factContainer.innerText = fact;
 }
 
+isHobbiesDisplayed = false;
+isLovesDisplayed = false;
+isHatesDisplayed = false;
+
 /**
  * Display my hobbies
  */
@@ -60,6 +64,18 @@ function getHobbies() {
 
     //Add them to the page
     const aboutMeContainer = document.getElementById('about-me-container');
+    if (aboutMeContainer.style.display === 'none') {
+        aboutMeContainer.style.display = 'block';
+        isHobbiesDisplayed = true;
+    }
+    else if(aboutMeContainer.style.display === 'block' && isHobbiesDisplayed === false) {
+        aboutMeContainer.style.display = 'block';
+
+    }
+    else {
+        aboutMeContainer.style.display = 'none';
+        isHobbiesDisplayed = false;
+    }
     text = "<h3>My hobbies:</h3> <ul>";
     for (i = 0; i < hobbies.length; i++) {
         text += "<li>" + hobbies[i] + "</li>"
@@ -83,6 +99,8 @@ function getLoves() {
 
     //Add them to the page
     const lovesContainer = document.getElementById('about-me-container');
+    if (lovesContainer.style.display === 'none') {lovesContainer.style.display = 'block';}
+    else {lovesContainer.style.display = 'none';}
     text = "<h3>What I love: </h3> <ul>";
     for (i = 0; i < loves.length; i++) {
         text += "<li>" + loves[i] + "</li>"
@@ -101,6 +119,8 @@ function getHates() {
 
     //Add them to the page
     const hatesContainer = document.getElementById('about-me-container');
+    if (hatesContainer.style.display === 'none') {hatesContainer.style.display = 'block';}
+    else {hatesContainer.style.display = 'none';}
     text = "<h3>What I hate: </h3> <ul>";
     for (i = 0; i < hates.length; i++) {
         text += "<li>" + hates[i] + "</li>"
