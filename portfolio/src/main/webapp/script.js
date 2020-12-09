@@ -68,9 +68,11 @@ function getHobbies() {
         aboutMeContainer.style.display = 'block';
         isHobbiesDisplayed = true;
     }
-    else if(aboutMeContainer.style.display === 'block' && isHobbiesDisplayed === false) {
+    else if(aboutMeContainer.style.display !== 'none' && (isLovesDisplayed === true || isHatesDisplayed === true)) {
         aboutMeContainer.style.display = 'block';
-
+        isHobbiesDisplayed = true;
+        isLovesDisplayed = false;
+        isHatesDisplayed = false;
     }
     else {
         aboutMeContainer.style.display = 'none';
@@ -98,15 +100,27 @@ function getLoves() {
     ];
 
     //Add them to the page
-    const lovesContainer = document.getElementById('about-me-container');
-    if (lovesContainer.style.display === 'none') {lovesContainer.style.display = 'block';}
-    else {lovesContainer.style.display = 'none';}
+    const aboutMeContainer = document.getElementById('about-me-container');
+    if (aboutMeContainer.style.display === 'none') {
+        aboutMeContainer.style.display = 'block';
+        isLovesDisplayed = true;
+    }
+    else if(aboutMeContainer.style.display !== 'none' && (isHobbiesDisplayed === true || isHatesDisplayed === true)) {
+        aboutMeContainer.style.display = 'block';
+        isLovesDisplayed = true;
+        isHobbiesDisplayed = false;
+        isHatesDisplayed = false;
+    }
+    else {
+        aboutMeContainer.style.display = 'none';
+        isLovesDisplayed = false;
+    }
     text = "<h3>What I love: </h3> <ul>";
     for (i = 0; i < loves.length; i++) {
         text += "<li>" + loves[i] + "</li>"
     }
     text += "</ul>"
-    lovesContainer.innerHTML = text;
+    aboutMeContainer.innerHTML = text;
 }
 
 /**
@@ -118,13 +132,25 @@ function getHates() {
     ];
 
     //Add them to the page
-    const hatesContainer = document.getElementById('about-me-container');
-    if (hatesContainer.style.display === 'none') {hatesContainer.style.display = 'block';}
-    else {hatesContainer.style.display = 'none';}
+    const aboutMeContainer = document.getElementById('about-me-container');
+    if (aboutMeContainer.style.display === 'none') {
+        aboutMeContainer.style.display = 'block';
+        isHatesDisplayed = true;
+    }
+    else if(aboutMeContainer.style.display !== 'none' && (isHobbiesDisplayed === true || isLovesDisplayed === true)) {
+        aboutMeContainer.style.display = 'block';
+        isHatesDisplayed = true;
+        isHobbiesDisplayed = false;
+        isLovesDisplayed = false;
+    }
+    else {
+        aboutMeContainer.style.display = 'none';
+        isHatesDisplayed = false;
+    }
     text = "<h3>What I hate: </h3> <ul>";
     for (i = 0; i < hates.length; i++) {
         text += "<li>" + hates[i] + "</li>"
     }
     text += "</ul>"
-    hatesContainer.innerHTML = text;
+    aboutMeContainer.innerHTML = text;
 }
