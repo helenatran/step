@@ -94,5 +94,6 @@ button {
 }
 
 button:hover {
-    box-shadow: 0 5px 5px 0 rgba(110, 108, 108, 0.24), 0 5px 5px 0 rgba(110, 108, 108, 0.24);
+    box-shadow: 0 5px 5px 0 rgba(110, 108, 108, 0.24), 
+        0 5px 5px 0 rgba(110, 108, 108, 0.24);
 }

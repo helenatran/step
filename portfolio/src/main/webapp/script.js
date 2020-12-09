@@ -38,9 +38,12 @@ function addRandomGreeting() {
 function addRandomFact() {
     const facts = [
         'I am a foodie',
-        'I have a collection of Starbucks mugs',
+        'I have a collection of Starbucks mugs from around the world',
         'I have a collection of "I LOVE" T-shirt from around the world',
-        'I have travelled to over 15 different countries'
+        'I have travelled to over 15 different countries',
+        'I have never broken anything on my body',
+        'I used to do Karate when I was younger',
+        'I watched all the Harry Potters in 2019 because I never watched them before (I know, shame on me!)'
     ];
 
     //Pick a random fact
@@ -51,111 +54,48 @@ function addRandomFact() {
     factContainer.innerText = fact;
 }
 
-isHobbiesDisplayed = false;
-isLovesDisplayed = false;
-isHatesDisplayed = false;
-
 /**
- * Display my hobbies
+ * Display the 'About Me' section
  */
-function getHobbies() {
-    const hobbies = [
-        'photography',
-        'dance',
-        'video games',
-        'gym & yoga',
-        'cooking'
-    ];
+function getAboutMe(aboutMeId) {
+    if (aboutMeId === 'hobbies') {
+        elemId = 'hobbies-container';
+    }
+    if (aboutMeId === 'loves') {
+        elemId = 'loves-container';
+    }
+    if (aboutMeId === 'hates') {
+        elemId = 'hates-container';
+    }
 
-    //Add them to the page
     const aboutMeContainer = document.getElementById('about-me-container');
+    const subContainer = document.getElementById(elemId);
+
+    const hobbiesContainer = document.getElementById('hobbies-container');
+    const lovesContainer = document.getElementById('loves-container');
+    const hatesContainer = document.getElementById('hates-container');
+
     if (aboutMeContainer.style.display === 'none') {
         aboutMeContainer.style.display = 'block';
-        isHobbiesDisplayed = true;
+        subContainer.style.display = 'block';
     }
-    else if(aboutMeContainer.style.display !== 'none' && (isLovesDisplayed === true || isHatesDisplayed === true)) {
-        aboutMeContainer.style.display = 'block';
-        isHobbiesDisplayed = true;
-        isLovesDisplayed = false;
-        isHatesDisplayed = false;
+    else if(aboutMeContainer.style.display !== 'none' && subContainer.style.display === 'none') {
+        subContainer.style.display = 'block';
+            if (aboutMeId === 'hobbies') {
+                lovesContainer.style.display = 'none';
+                hatesContainer.style.display = 'none';
+            }
+            if (aboutMeId === 'loves') {
+                hobbiesContainer.style.display = 'none';
+                hatesContainer.style.display = 'none';
+            }
+            if (aboutMeId === 'hates') {
+                hobbiesContainer.style.display = 'none';
+                lovesContainer.style.display = 'none';
+            }
     }
     else {
         aboutMeContainer.style.display = 'none';
-        isHobbiesDisplayed = false;
+        subContainer.style.display = 'none';
     }
-    text = text = "<ul class=\"collection with-header z-depth-3\"><li class=\"collection-header center purple lighten-4 white-text\"><h4>My Hobbies</h4></li>";;
-    for (i = 0; i < hobbies.length; i++) {
-        text += "<li class=\"collection-item grey lighten-4\">" + hobbies[i] + "</li>"
-    }
-    text += "</ul>"
-    aboutMeContainer.innerHTML = text;
-    
-}
-
-/**
- * Display what I love
- */
-function getLoves() {
-    const loves = [
-        'dogs (especially corgis, and I have one!)',
-        'movies/series (favourite genre: romantic & comedy)',
-        'books (favourite genre: romance & self-help)',
-        'fashion',
-        'my planner (keep me organised!)'
-    ];
-
-    //Add them to the page
-    const aboutMeContainer = document.getElementById('about-me-container');
-    if (aboutMeContainer.style.display === 'none') {
-        aboutMeContainer.style.display = 'block';
-        isLovesDisplayed = true;
-    }
-    else if(aboutMeContainer.style.display !== 'none' && (isHobbiesDisplayed === true || isHatesDisplayed === true)) {
-        aboutMeContainer.style.display = 'block';
-        isLovesDisplayed = true;
-        isHobbiesDisplayed = false;
-        isHatesDisplayed = false;
-    }
-    else {
-        aboutMeContainer.style.display = 'none';
-        isLovesDisplayed = false;
-    }
-    text = text = "<ul class=\"collection with-header z-depth-3\"><li class=\"collection-header center purple lighten-4 white-text\"><h4>What I love</h4></li>";;
-    for (i = 0; i < loves.length; i++) {
-        text += "<li class=\"collection-item grey lighten-4\">" + loves[i] + "</li>"
-    }
-    text += "</ul>"
-    aboutMeContainer.innerHTML = text;
-}
-
-/**
- * Display what I hate
- */
-function getHates() {
-    const hates = [
-        'mess (so I\'m usually quite organised!)'
-    ];
-
-    //Add them to the page
-    const aboutMeContainer = document.getElementById('about-me-container');
-    if (aboutMeContainer.style.display === 'none') {
-        aboutMeContainer.style.display = 'block';
-        isHatesDisplayed = true;
-    }
-    else if(aboutMeContainer.style.display !== 'none' && (isHobbiesDisplayed === true || isLovesDisplayed === true)) {
-        aboutMeContainer.style.display = 'block';
-        isHatesDisplayed = true;
-        isHobbiesDisplayed = false;
-        isLovesDisplayed = false;
-    }
-    else {
-        aboutMeContainer.style.display = 'none';
-        isHatesDisplayed = false;
-    }
-    text = text = "<ul class=\"collection with-header z-depth-3\"><li class=\"collection-header center purple lighten-4 white-text\"><h4>What I hate</h4></li>";;
-    for (i = 0; i < hates.length; i++) {
-        text += "<li class=\"collection-item grey lighten-4\">" + hates[i] + "</li>"
-    }
-    text += "</ul>"
-    aboutMeContainer.innerHTML = text;
 }
