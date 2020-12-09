@@ -12,6 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+document.addEventListener('DOMContentLoaded', function() {
+    elems = document.querySelectorAll('.slider');
+    instances = M.Slider.init(elems);
+});
+
 /**
  * Adds a random greeting to the page.
  */
@@ -78,9 +83,9 @@ function getHobbies() {
         aboutMeContainer.style.display = 'none';
         isHobbiesDisplayed = false;
     }
-    text = "<h3>My hobbies:</h3> <ul>";
+    text = text = "<ul class=\"collection with-header z-depth-3\"><li class=\"collection-header center purple lighten-4 white-text\"><h4>My Hobbies</h4></li>";;
     for (i = 0; i < hobbies.length; i++) {
-        text += "<li>" + hobbies[i] + "</li>"
+        text += "<li class=\"collection-item grey lighten-4\">" + hobbies[i] + "</li>"
     }
     text += "</ul>"
     aboutMeContainer.innerHTML = text;
@@ -115,9 +120,9 @@ function getLoves() {
         aboutMeContainer.style.display = 'none';
         isLovesDisplayed = false;
     }
-    text = "<h3>What I love: </h3> <ul>";
+    text = text = "<ul class=\"collection with-header z-depth-3\"><li class=\"collection-header center purple lighten-4 white-text\"><h4>What I love</h4></li>";;
     for (i = 0; i < loves.length; i++) {
-        text += "<li>" + loves[i] + "</li>"
+        text += "<li class=\"collection-item grey lighten-4\">" + loves[i] + "</li>"
     }
     text += "</ul>"
     aboutMeContainer.innerHTML = text;
@@ -147,9 +152,9 @@ function getHates() {
         aboutMeContainer.style.display = 'none';
         isHatesDisplayed = false;
     }
-    text = "<h3>What I hate: </h3> <ul>";
+    text = text = "<ul class=\"collection with-header z-depth-3\"><li class=\"collection-header center purple lighten-4 white-text\"><h4>What I hate</h4></li>";;
     for (i = 0; i < hates.length; i++) {
-        text += "<li>" + hates[i] + "</li>"
+        text += "<li class=\"collection-item grey lighten-4\">" + hates[i] + "</li>"
     }
     text += "</ul>"
     aboutMeContainer.innerHTML = text;
