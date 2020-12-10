@@ -3,6 +3,10 @@
     font-family: Arial, Helvetica, sans-serif;
 }
 
+h4 {
+    padding-top: 20px;
+}
+
 .column {
   float: left;
   padding: 10px;
@@ -36,11 +40,6 @@ Reference: https://www.w3schools.com/css/css_templates.asp */
   .column.side, .column.middle {
     width: 100%;
   }
-}
-
-.random-greetings-container {
-    padding: 10px 0px 10px 0px;
-    margin: 10px 0px 10px 0px;
 }
 
 img {
@@ -79,21 +78,4 @@ table th {
 
 table tr:nth-child(even){
     background-color: rgb(248, 238, 246);
-}
-
-button {
-    background-color: rgb(240, 204, 232);
-    font-size: 15px;
-    padding: 15px 32px;
-    color: white;
-    border: none;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    border-radius: 8px;
-}
-
-button:hover {
-    box-shadow: 0 5px 5px 0 rgba(110, 108, 108, 0.24), 
-        0 5px 5px 0 rgba(110, 108, 108, 0.24);
 }
