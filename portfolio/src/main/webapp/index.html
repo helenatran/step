@@ -15,190 +15,132 @@
 
   <body>
     <nav>
-        <div class="nav-wrapper pink lighten-3">
+      <div class="nav-wrapper pink lighten-3">
         <a href="#" class="brand-logo"><i class="material-icons">star</i>Helena's Portfolio</a>
         <ul id="nav-mobile" class="right hide-on-med-and-down">
-            <!-- TODO(helenatran): Make the nav bar functional -->
-            <li><a href="#">My Projects</a></li>
-            <li><a href="#">Photo Gallery</a></li>
-            <li><a href="#">STEP Experience</a></li>
+          <!-- TODO(helenatran): Make the nav bar functional -->
+          <li><a href="./myProjects.html">My Projects</a></li>
+          <li><a href="./photoGallery.html">Photo Gallery</a></li>
+          <li><a href="./step.html">STEP Experience</a></li>
         </ul>
-        </div>
+      </div>
     </nav>
 
     <div class="slider">
       <ul class="slides">
-          <li>
-              <img src="images/uluru-banner.png">
-              <div class="caption center-align">
-                  <h3>Welcome to Helena's Portfolio!</h3>
-                  <h5 class="light grey-text text-lighten-3">Browse to get to know me</h5>
-              </div>
-          </li>
-          <li>
-              <img src="images/noumea-sunset-banner.png"> 
-              <div class="caption right-align">
-                  <h3>Find more about my story and experiences</h3>
-              </div>
-          </li>
-          <li>
-              <img src="images/sydney-beach.jpg"> 
-              <div class="caption left-align">
-                  <h3>Hope you find it interesting!</h3>
-              </div>
-          </li>
+        <li>
+          <img src="images/uluru-banner.png">
+            <div class="caption center-align">
+              <h3>Welcome to Helena's Portfolio!</h3>
+              <h5 class="light grey-text text-lighten-3">Browse to get to know me</h5>
+            </div>
+        </li>
+        <li>
+            <img src="images/noumea-sunset-banner.png"> 
+            <div class="caption right-align">
+                <h3>Find more about my story and experiences</h3>
+            </div>
+        </li>
+        <li>
+            <img src="images/sydney-beach.jpg"> 
+            <div class="caption left-align">
+                <h3>Hope you find it interesting!</h3>
+            </div>
+        </li>
       </ul>
     </div>
 
     <div class="content">
-        <div class="column side"></div>
-        <div class="column middle">
-            <div>
-                <a class="waves-effect waves-light btn-small pink lighten-3" onClick="addRandomGreeting()"><i class="material-icons right">tag_faces</i>Click to say hi! </a>
-                <span id="greeting-container"></span>
-            </div>
-
-            <h4>More about me</h4>
-            <p>My name is Helena and I am a Google STEP intern. I was born in New Caledonia (so I'm French!) 
-                but I have Chinese and Vietnamese background. I arrived in Sydney in 2017 to start a double degree 
-                (Software Engineering and Finance) at UTS.</p>
-
-            <h4>What makes me me?</h4>
-            <p>My hobbies, the people around me and what I love and hate probably make me what I am.</p>
-            <div>
-                <a class="waves-effect waves-light btn-small pink lighten-3" id="hobbies" onClick="getAboutMe(this.id)"><i class="material-icons left">videogame_asset</i>My Hobbies</a>
-                <a class="waves-effect waves-light btn-small pink lighten-3" id="loves" onClick="getAboutMe(this.id)"><i class="material-icons left">favorite</i>What I love</a>
-                <a class="waves-effect waves-light btn-small pink lighten-3" id="hates" onClick="getAboutMe(this.id)"><i class="material-icons left">mood_bad</i>What I hate</a>
-            </div>
-            <div class="card">
-                <div class="card-content" id="about-me-container" style="display:none">
-                    <div id="hobbies-container" style="display:none">
-                        <ul class="collection with-header z-depth-3">
-                                <li class="collection-header center purple lighten-4 white-text">
-                                    <h4>My Hobbies</h4>
-                                </li>
-                                <li class="collection-item grey lighten-4">photography</li>
-                                <li class="collection-item grey lighten-4">dance</li>
-                                <li class="collection-item grey lighten-4">video games</li>
-                                <li class="collection-item grey lighten-4">gym & yoga</li>
-                                <li class="collection-item grey lighten-4">cooking</li>
-                        </ul>
-                    </div>
-
-                    <div id="loves-container" style="display:none">
-                        <ul class="collection with-header z-depth-3">
-                                <li class="collection-header center purple lighten-4 white-text">
-                                    <h4>What I love</h4>
-                                </li>
-                                <li class="collection-item grey lighten-4">dogs (especially corgis, and I have one!)</li>
-                                <li class="collection-item grey lighten-4">movies/series (favourite genre: romantic & comedy)</li>
-                                <li class="collection-item grey lighten-4">books (favourite genre: romance & self-help)</li>
-                                <li class="collection-item grey lighten-4">fashion</li>
-                                <li class="collection-item grey lighten-4">my planner (keep me organised!)</li>
-                        </ul>
-                    </div>
-
-                    <div id="hates-container"style="display:none">
-                        <ul class="collection with-header z-depth-3">
-                            <li class="collection-header center purple lighten-4 white-text">
-                                <h4>What I hate</h4>
-                            </li>
-                            <li class="collection-item grey lighten-4">mess (so I'm usually quite organised!)</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-
-            <h4>Fun Fact Roulette</h4>
-            <p>Get to know me more through this fun fact roulette!</p>
-            <div>
-                <a class="waves-effect waves-light btn-small pink lighten-3" onClick="addRandomFact()">
-                    <i class="material-icons right">star</i>
-                    Click for a fun fact!
-                </a>
-                <span id="fact-container"></span>
-            </div>
-
-            <h2>My life and interests in pictures</h2>
-            <div class="image-gallery">
-                <img src="images/kimi.jpg"/>
-                <img src="images/camel.JPG"/>
-                <img src="images/christmas.JPG"/>
-                <img src="images/rexy.jpg"/>
-                <img src="images/noumea.jpg"/>
-                <img src="images/sushi.JPG"/>
-                <img src="images/pho.JPG"/>
-                <img src="images/noumea-dogs.png"/>
-            </div>
-
-            <h2>My Projects</h2>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Date</th>
-                        <th>Project name</th>
-                        <th>Project description</th>
-                        <th>Project link</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>Mar 2018 - Jun 2018</td>
-                        <td>Movie Kiosk Software</td>
-                        <td>Part of the subject Application Programming at UTS (individual project). 
-                            Created using GUI and Java. Enable customers to browse, 
-                            rent and return movies.</td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td>Mar 2019 - Jun 2019</td>
-                        <td>Directed Graph Structure with Algorithms</td>
-                        <td>Part of the subject Data Structure and Algorithms at UTS (individual project). 
-                            Created using C++.</td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td>Jul 2019 - Oct 2019</td>
-                        <td>E-shop - Computer devices</td>
-                        <td>Part of the subject Software Engineering Studio 1A at UTS (group project). 
-                            Created using Angular (HTML, CSS, JavaScript). Enable customers to search,
-                            browse and buy computer devices.</td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td>Mar 2020 - Jun 2020</td>
-                        <td>Electrical Forecast Database</td>
-                        <td>Part of the subject Database Programming at UTS (individual project). 
-                            Created using PL/SQL. Enable to do a daily forecast of around 50,000 
-                            engery requirements.</td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td>Jul 2020 - Oct 2020</td>
-                        <td>E-Library System</td>
-                        <td>Part of the subject Software Engineering Studio 1B at UTS (group project). 
-                            Created using Ruby on Rails. Enable users to browse, borrow, return and renew e-books</td>
-                        <td><a href="https://github.com/helenatran/e-library">GitHub</a></td>
-                    </tr>
-                    <tr>
-                        <td>Jul 2020 - Oct 2020</td>
-                        <td>IOU - favour exchange website</td>
-                        <td>Part of the subject Advanced Internet Programming at UTS (group project). 
-                            Created using MERN (MongoDB, Express, React, Node.js). Enable users to record favours owed among friends</td>
-                        <td><a href="https://github.com/helenatran/iou">GitHub</a></td>
-                    </tr>
-                </tbody>
-            </table>
-
-            <h2>Connect with me</h2>
-            <ul>
-                <li><a href="https://au.linkedin.com/in/helenaelisabethtran">LinkedIn</a></li>
-                <li><a href="https://github.com/helenatran">GitHub</a></li>
-            </ul>
+      <div class="column side"></div>
+      <div class="column middle">
+        <div>
+          <a class="waves-effect waves-light btn-small pink lighten-3" onClick="addRandomGreeting()"><i class="material-icons right">tag_faces</i>Click to say hi! </a>
+          <span id="greeting-container"></span>
         </div>
-        <div class="column side"></div>
+
+        <h4>More about me</h4>
+        <p>My name is Helena and I am a Google STEP intern. I was born in New Caledonia (so I'm French!) 
+            but I have Chinese and Vietnamese background. I arrived in Sydney in 2017 to start a double degree 
+            (Software Engineering and Finance) at UTS.</p>
+
+        <h4>What makes me me?</h4>
+        <p>My hobbies, the people around me and what I love and hate probably make me what I am.</p>
+        <div>
+            <a class="waves-effect waves-light btn-small pink lighten-3" id="hobbies" onClick="getAboutMe(this.id)"><i class="material-icons left">videogame_asset</i>My Hobbies</a>
+            <a class="waves-effect waves-light btn-small pink lighten-3" id="loves" onClick="getAboutMe(this.id)"><i class="material-icons left">favorite</i>What I love</a>
+            <a class="waves-effect waves-light btn-small pink lighten-3" id="hates" onClick="getAboutMe(this.id)"><i class="material-icons left">mood_bad</i>What I hate</a>
+        </div>
+
+        <div class="card">
+          <div class="card-content" id="about-me-container" style="display:none">
+            <div id="hobbies-container" style="display:none">
+              <ul class="collection with-header z-depth-3">
+                <li class="collection-header center purple lighten-4 white-text">
+                  <h4>My Hobbies</h4>
+                </li>
+                <li class="collection-item grey lighten-4">photography</li>
+                <li class="collection-item grey lighten-4">dance</li>
+                <li class="collection-item grey lighten-4">video games</li>
+                <li class="collection-item grey lighten-4">gym & yoga</li>
+                <li class="collection-item grey lighten-4">cooking</li>
+              </ul>
+            </div>
+
+            <div id="loves-container" style="display:none">
+              <ul class="collection with-header z-depth-3">
+                <li class="collection-header center purple lighten-4 white-text">
+                  <h4>What I love</h4>
+                </li>
+                <li class="collection-item grey lighten-4">dogs (especially corgis, and I have one!)</li>
+                <li class="collection-item grey lighten-4">movies/series (favourite genre: romantic & comedy)</li>
+                <li class="collection-item grey lighten-4">books (favourite genre: romance & self-help)</li>
+                <li class="collection-item grey lighten-4">fashion</li>
+                <li class="collection-item grey lighten-4">my planner (keep me organised!)</li>
+              </ul>
+            </div>
+
+            <div id="hates-container"style="display:none">
+              <ul class="collection with-header z-depth-3">
+                <li class="collection-header center purple lighten-4 white-text">
+                  <h4>What I hate</h4>
+                </li>
+                <li class="collection-item grey lighten-4">mess (so I'm usually quite organised!)</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <h4>Fun Fact Roulette</h4>
+        <p>Get to know me more through this fun fact roulette!</p>
+        <div>
+          <a class="waves-effect waves-light btn-small pink lighten-3" onClick="addRandomFact()">
+            <i class="material-icons right">star</i>
+            Click for a fun fact!
+          </a>
+          <span id="fact-container"></span>
+        </div>
+      </div>
+      <div class="column side"></div>
     </div>
-    <div class="footer"></div>
+
+    <footer class="page-footer grey darken-3" style="height:65px">
+      <div id="footer-banner" class="center-align">
+        Connect with me: 
+        <span>
+          <a href="https://au.linkedin.com/in/helenaelisabethtran">
+            <img src="https://cdn3.iconfinder.com/data/icons/2018-social-media-black-and-white-logos/1000/2018_social_media_popular_app_logo_linkedin-512.png"/>
+          </a>
+          <a href="https://github.com/helenatran">
+            <img src="https://cdn2.iconfinder.com/data/icons/black-white-social-media/64/github_social_media_logo-512.png"/>
+          </a>
+        </span>
+      </div>
+      <div class="footer-copyright grey darken-3">
+        <div class="container center-align">
+          All photos displayed have been taken by me
+        </div>
+      </div>
+    </footer>
 
     <!--JavaScript at end of body for optimized loading-->
     <script type="text/javascript" src="js/materialize.min.js"></script>
