@@ -1,9 +1,94 @@
-#content {
-  margin-left: auto;
-  margin-right: auto;
-  width: 650px;
+* {
+  box-sizing: border-box;
+  font-family: Arial, Helvetica, sans-serif;
 }
 
-#greeting-container {
-  margin-top: 20px;
+h4 {
+  padding-top: 20px;
+}
+
+.content {
+    background-color: #f48fb1;
+}
+
+.column {
+  float: left;
+  padding: 10px;
+}
+
+.column.side {
+  width: 17.5%;
+  background-color: #f48fb1;
+  min-height: 200px;
+  margin-top: -40px;
+}
+
+.column.middle {
+  width: 65%;
+  background-color: white;
+}
+
+.content:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+/* Responsive layout - makes the three columns stack on top of each other instead of next to each other 
+Reference: https://www.w3schools.com/css/css_templates.asp */
+@media (max-width: 600px) {
+  .column.side, .column.middle {
+    width: 100%;
+  }
+}
+
+.image-gallery {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin: 60px;
+}
+
+.image-gallery img {
+  margin: 10px;
+  height: 225px;
+  max-width: 225px;
+}
+
+#banner {
+  position: relative;
+}
+
+#banner-text {
+  position: absolute;
+  top: 37%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #eeeeee;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+table th {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  text-align: center;
+  background-color: #00bcd4;
+  color: white;
+}
+
+table tr:nth-child(even){
+  background-color: rgb(248, 238, 246);
+}
+
+footer img {
+  height: 40px;
+  margin-bottom: -9px;
+}
+
+#footer-banner {
+  font-size: 30px;
 }
