@@ -20,6 +20,10 @@ document.addEventListener('DOMContentLoaded', function() {
   instances_two = M.Materialbox.init(elems_two);
 });
 
+document.addEventListener('DOMContentLoaded', function getNavBar() {
+  document.getElementById('navbar-container').innerHTML='<object type="text/html" data="navBar.html" width="1440" height="73"></object>'
+})
+
 /**
  * Adds a random greeting to the page.
  */
