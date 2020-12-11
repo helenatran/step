@@ -20,8 +20,10 @@ document.addEventListener('DOMContentLoaded', function() {
   instances_two = M.Materialbox.init(elems_two);
 });
 
-document.addEventListener('DOMContentLoaded', function getNavBar() {
-  document.getElementById('navbar-container').innerHTML='<object type="text/html" data="navBar.html" width="1440" height="73"></object>'
+//Load Navigation Bar and Footer when loading page
+document.addEventListener('DOMContentLoaded', function() {
+  document.getElementById('navbar-container').innerHTML='<object type="text/html" data="navBar.html" width="100%" height="73"></object>'
+  document.getElementById('footer-container').innerHTML='<object type="text/html" data="footer.html" width="100%" height="115"></object>'
 })
 
 /**
