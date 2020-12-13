@@ -35,7 +35,7 @@
         <version>2.2.0</version>
         <configuration>
           <!-- TODO: set project ID. -->
-          <deploy.projectId>helena-tran</deploy.projectId>
+          <deploy.projectId>google.com:helena-step</deploy.projectId>
           <deploy.version>1</deploy.version>
         </configuration>
       </plugin>
