@@ -107,16 +107,16 @@ function getAboutMe(aboutMeId) {
   }
 }
 
-//Use fetch to request hello message from server
-async function getList() {
+//Use fetch to request comments
+async function getComments() {
     const response = await fetch('/data');
-    const list = await response.json();
-    console.log(list);
+    const comments = await response.json();
+    console.log(comments);
 
-    const listElement = document.getElementById('list-container');
+    const listElement = document.getElementById('comments-container');
     listElement.innerHTML = '';
-    for (i = 0; i < list.length; i++) {
-      listElement.appendChild(createListElement(list[i]));
+    for (i = 0; i < comments.length; i++) {
+      listElement.appendChild(createListElement(comments[i]));
     }
 }
 
