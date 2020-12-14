@@ -108,8 +108,20 @@ function getAboutMe(aboutMeId) {
 }
 
 //Use fetch to request hello message from server
-async function getHelloMe() {
+async function getList() {
     const response = await fetch('/data');
-    const helloMsg = await response.text();
-    document.getElementById('hello-container').innerHTML = helloMsg;
+    const list = await response.json();
+    console.log(list);
+
+    const listElement = document.getElementById('list-container');
+    listElement.innerHTML = '';
+    for (i = 0; i < list.length; i++) {
+      listElement.appendChild(createListElement(list[i]));
+    }
+}
+
+function createListElement(text) {
+  const liElement = document.createElement('li');
+  liElement.innerText = text;
+  return liElement;
 }
