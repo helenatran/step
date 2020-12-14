@@ -12,19 +12,17 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// Initialise the slider (index.html) and the material box (photoGallery.html)
 document.addEventListener('DOMContentLoaded', function() {
+  // Initialise the slider (index.html) and the material box (photoGallery.html)
   elems_one = document.querySelectorAll('.slider');
   instances_one = M.Slider.init(elems_one);
   elems_two = document.querySelectorAll('.materialboxed');
   instances_two = M.Materialbox.init(elems_two);
-});
 
-//Load Navigation Bar and Footer when loading page
-document.addEventListener('DOMContentLoaded', function() {
+  //Load Navigation Bar and Footer when loading page
   document.getElementById('navbar-container').innerHTML='<object type="text/html" data="navBar.html" width="100%" height="73"></object>'
   document.getElementById('footer-container').innerHTML='<object type="text/html" data="footer.html" width="100%" height="115"></object>'
-})
+});
 
 /**
  * Adds a random greeting to the page.
