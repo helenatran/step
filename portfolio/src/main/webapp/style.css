@@ -11,6 +11,10 @@ h4 {
     background-color: #f48fb1;
 }
 
+#navbar-container {
+    height: 64px;
+}
+
 .column {
   float: left;
   padding: 10px;
