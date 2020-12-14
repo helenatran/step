@@ -106,3 +106,10 @@ function getAboutMe(aboutMeId) {
     subContainer.style.display = 'none';
   }
 }
+
+//Use fetch to request hello message from server
+async function getHelloMe() {
+    const response = await fetch('/data');
+    const helloMsg = await response.text();
+    document.getElementById('hello-container').innerHTML = helloMsg;
+}
