@@ -42,7 +42,6 @@
     <div class="content">
       <div class="column side"></div>
       <div class="column middle">
-        <div id="list-container"></div>
         <div>
           <a class="waves-effect waves-light btn pink lighten-3" onClick="addRandomGreeting()"><i class="material-icons right">tag_faces</i>Click to say hi! </a>
           <span id="greeting-container"></span>
@@ -109,6 +108,16 @@
           </a>
           <span id="fact-container"></span>
         </div>
+        <h4>Leave me a comment: </h4>
+        <form action="/data" method="POST">
+          <label for="username">Name: </label>
+          <input type="text" name="username">
+          <label for="comment">Comment: </label>
+          <textarea name="comment"></textarea>
+          <br/>
+          <input type="submit">
+        </form>
+        <div id="list-container"></div>
       </div>
       <div class="column side"></div>
     </div>
