@@ -14,6 +14,9 @@
 
 package com.google.sps.servlets;
 
+import com.google.appengine.api.datastore.DatastoreService;
+import com.google.appengine.api.datastore.DatastoreServiceFactory;
+import com.google.appengine.api.datastore.Entity;
 import java.io.IOException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -43,8 +46,15 @@ public class DataServlet extends HttpServlet {
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
     //Get inputs from the form
-    String username = getParameter(request, "username", "");
-    String comment = getParameter(request, "comment", "");
+    String username = request.getParameter("username");
+    String comment = request.getParameter("comment");
+
+    Entity commentEntity = new Entity("Comment");
+    commentEntity.setProperty("username", username);
+    commentEntity.setProperty("comment", comment);
+
+    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+    datastore.put(commentEntity);
 
     String commentDetails = "Username: " + username + "; Comment: " + comment;
     comments.add(commentDetails);
@@ -52,6 +62,7 @@ public class DataServlet extends HttpServlet {
     //Respond
     response.setContentType("text/html;");
     response.getWriter().println(comments.toString());
+    response.sendRedirect("/index.html");
   }
 
   /**
@@ -61,17 +72,5 @@ public class DataServlet extends HttpServlet {
     Gson gson = new Gson();
     String json = gson.toJson(list);
     return json;
-  }
-
-  /**
-   * @return the request parameter, or the default value if the parameter
-   *         was not specified by the client
-   */
-  private String getParameter(HttpServletRequest request, String name, String defaultValue) {
-    String value = request.getParameter(name);
-    if (value == null) {
-        return defaultValue;
-    }
-    return value;
   }
 }
