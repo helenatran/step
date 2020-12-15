@@ -107,21 +107,48 @@ function getAboutMe(aboutMeId) {
   }
 }
 
-//Use fetch to request comments
-async function getComments() {
+/** Fetches comments from the server and add them to the DOM. */
+async function loadComments() {
     const response = await fetch('/data');
     const comments = await response.json();
     console.log(comments);
 
-    const listElement = document.getElementById('comments-container');
-    listElement.innerHTML = '';
-    for (i = 0; i < comments.length; i++) {
-      listElement.appendChild(createListElement(comments[i]));
-    }
+    const commentListElement = document.getElementById('comments-list');
+    comments.forEach((comment) => {
+        commentListElement.appendChild(createCommentElement(comment));
+    })
 }
 
-function createListElement(text) {
-  const liElement = document.createElement('li');
-  liElement.innerText = text;
-  return liElement;
+/** Creates an element that represents a comment, including its delete button. */
+function createCommentElement(comment) {
+  const commentElement = document.createElement('li');
+  commentElement.className = 'comment';
+
+  const usernameElement = document.createElement('span');
+  usernameElement.innerText = "Username: " + comment.username;
+
+  const commentTextElement = document.createElement('span');
+  commentTextElement.innerText = "; Comment: " + comment.commentText + " ";
+
+  const deleteButtonElement = document.createElement('button');
+  deleteButtonElement.innerText = 'Delete';
+
+  deleteButtonElement.addEventListener('click', () => {
+    deleteComment(comment);
+
+    // Remove the task from the DOM.
+    commentElement.remove();
+  });
+
+  commentElement.appendChild(usernameElement);
+  commentElement.appendChild(commentTextElement);
+  commentElement.appendChild(deleteButtonElement);
+  return commentElement;
+}
+
+/** Tells the server to delete the comment. */
+function deleteComment(comment) {
+  const params = new URLSearchParams();
+  params.append('id', comment.id);
+  fetch('/delete-data', {method: 'POST', body: params});
 }
