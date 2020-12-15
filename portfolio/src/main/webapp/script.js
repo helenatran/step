@@ -111,7 +111,6 @@ function getAboutMe(aboutMeId) {
 async function loadComments() {
     const response = await fetch('/data');
     const comments = await response.json();
-    console.log(comments);
 
     const commentListElement = document.getElementById('comments-list');
     comments.forEach((comment) => {

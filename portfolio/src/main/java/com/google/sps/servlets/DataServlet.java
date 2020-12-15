@@ -30,12 +30,12 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-// Servlet responsible for creating and displaying comments
+// Servlet responsible for creating and displaying comments.
 @WebServlet("/data")
 public class DataServlet extends HttpServlet {
   Gson gson = new Gson();
 
-  //Get the comments
+  // Get the comments.
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     Query query = new Query("Comment").addSort("timestamp", SortDirection.DESCENDING);
@@ -53,15 +53,15 @@ public class DataServlet extends HttpServlet {
       comments.add(comment);
     }
 
-    //Send the JSON as response
+    // Send the JSON as response.
     response.setContentType("application/json;");
     response.getWriter().println(gson.toJson(comments));
   }
 
-  //Create new comment
+  // Create new comment.
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    //Get inputs from the form
+    // Get inputs from the form.
     String username = request.getParameter("username");
     String commentText = request.getParameter("commentText");
     long timestamp = System.currentTimeMillis();

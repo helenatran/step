@@ -14,7 +14,7 @@
 
 package com.google.sps.data;
 
-/** An item on a comment section */
+/** An item on a comment section. */
 public final class Comment {
 
   private final long id;
@@ -22,6 +22,7 @@ public final class Comment {
   private final String commentText;
   private final long timestamp;
 
+  /** Create a new comment. */
   public Comment(long id, String username, String commentText, long timestamp) {
     this.id = id;
     this.username = username;
