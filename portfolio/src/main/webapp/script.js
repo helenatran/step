@@ -109,10 +109,12 @@ function getAboutMe(aboutMeId) {
 
 /** Fetches comments from the server and add them to the DOM. */
 async function loadComments() {
-    const response = await fetch('/data');
+    limitNo = document.getElementById('commentsNo').value;
+    const response = await fetch('/data?limit=' + limitNo);
     const comments = await response.json();
 
-    const commentListElement = document.getElementById('comments-list');
+    commentListElement = document.getElementById('comments-list');
+    commentListElement.innerHTML = '';
     comments.forEach((comment) => {
         commentListElement.appendChild(createCommentElement(comment));
     })

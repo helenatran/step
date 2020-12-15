@@ -96,3 +96,21 @@ footer img {
 #footer-banner {
   font-size: 30px;
 }
+
+select {
+  display: block;
+  width: 15%;
+}
+
+label[for="commentsNo"] {
+  text-align: right;
+  clear: both;
+  float: left;
+  margin-right: 15px;
+  margin-top: 16px;
+}
+
+#commentsNo-container {
+  margin: 10px;
+  margin-bottom: 20px;
+}
