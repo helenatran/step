@@ -158,7 +158,6 @@ function deleteComment(comment) {
 async function deleteAllComments() {
   const response = await fetch('/data');
   const comments = await response.json();
-  console.log(comments);
   for (i = 0; i < comments.length; i++) {
     deleteComment(comments[i]);
   }

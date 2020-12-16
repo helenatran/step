@@ -48,7 +48,6 @@ public class DataServlet extends HttpServlet {
     int limitNo;
     if (limit == null) {
       limitNo = results.countEntities(FetchOptions.Builder.withDefaults());
-      System.out.println(limitNo);
     }
     else {
       limitNo = Integer.parseInt(limit);
