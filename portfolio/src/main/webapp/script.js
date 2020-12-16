@@ -197,3 +197,9 @@ async function getAllComments() {
   const comments = await response.json();
   return comments;
 }
+
+/** ... */
+async function hideComments() {
+  const response = await fetch('/login');
+  console.log('hideComments response:' + response);
+}
