@@ -13,7 +13,7 @@
     <link type="text/css" rel="stylesheet" href="css/materialize.min.css"  media="screen,projection"/>
   </head>
 
-  <body>
+  <body onload="loadComments()">
     <div id="navbar-container"></div>
     <div class="slider">
       <ul class="slides">
@@ -108,6 +108,16 @@
           </a>
           <span id="fact-container"></span>
         </div>
+        <h4>Leave me a comment: </h4>
+        <form action="/data" method="POST">
+          <label for="username">Name: </label>
+          <input id="username" type="text" name="username">
+          <label for="commentText">Comment: </label>
+          <textarea id="commentText" name="commentText"></textarea>
+          <br/>
+          <input type="submit">
+        </form>
+        <div id="comments-list"></div>
       </div>
       <div class="column side"></div>
     </div>
