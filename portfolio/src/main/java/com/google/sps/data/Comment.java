@@ -22,7 +22,12 @@ public final class Comment {
   private final String commentText;
   private final long timestamp;
 
-  /** Create a new comment. */
+  /** Create a new comment. 
+   *  @params id            the id the of the comment.
+   *  @params username      the username of the person adding the comment.
+   *  @params commentText   the text of the comment.
+   *  @params timestamp     the timestamp at which the comment has been created.
+  */
   public Comment(long id, String username, String commentText, long timestamp) {
     this.id = id;
     this.username = username;
