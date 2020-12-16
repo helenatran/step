@@ -19,10 +19,11 @@ document.addEventListener('DOMContentLoaded', async function() {
   elems_two = document.querySelectorAll('.materialboxed');
   instances_two = M.Materialbox.init(elems_two);
 
-  //Load Navigation Bar and Footer when loading page
+  // Load Navigation Bar and Footer when loading page
   document.getElementById('navbar-container').innerHTML='<object type="text/html" data="navBar.html" width="100%" height="73"></object>'
   document.getElementById('footer-container').innerHTML='<object type="text/html" data="footer.html" width="100%" height="115"></object>'
 
+  // Hide comment section if there is no comment
   const commentSectionContainer = document.getElementById('comments-section');
   const comments = await getAllComments();
   if (comments.length === 0) {
