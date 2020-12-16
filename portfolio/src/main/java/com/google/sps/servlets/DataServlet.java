@@ -45,8 +45,15 @@ public class DataServlet extends HttpServlet {
 
     List<Comment> comments = new ArrayList<>();
     String limit = request.getParameter("limit");
-    System.out.println(limit);
-    Integer limitNo = Integer.parseInt(limit);
+    int limitNo;
+    if (limit == null) {
+      limitNo = results.countEntities(FetchOptions.Builder.withDefaults());
+      System.out.println(limitNo);
+    }
+    else {
+      limitNo = Integer.parseInt(limit);
+    }
+
     for (Entity entity : results.asIterable(FetchOptions.Builder.withLimit(limitNo))) {
       long id = entity.getKey().getId();
       String username = (String) entity.getProperty("username");
