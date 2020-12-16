@@ -108,16 +108,25 @@
           </a>
           <span id="fact-container"></span>
         </div>
-        <h4>Leave me a comment: </h4>
+        <h4>
+          Leave me a comment 
+          <span id="comment-icon">
+            <i class="material-icons">insert_emoticon</i>
+          </span>
+        </h4>
         <form action="/data" method="POST">
-          <label for="username">Name: </label>
+          <label for="username">Name </label>
           <input id="username" type="text" name="username">
-          <label for="commentText">Comment: </label>
-          <textarea id="commentText" name="commentText"></textarea>
+          <label for="commentText">Comment </label>
+          <textarea id="commentText" name="commentText" class="materialize-textarea"></textarea>
           <br/>
-          <input type="submit">
+          <button class="btn waves-effect waves-light pink lighten-3" type="submit" name="submit">Submit
+            <i class="material-icons right">send</i>
+          </button>
         </form>
-        <div id="commentsNo-container">
+        <div id="comments-section" style="display:none">
+          <h5>My Comments: </h5>
+         <div id="commentsNo-container">
           <label for="commentsNo">Number of comments to display: </label>
           <select name="commentsNo" id="commentsNo" onChange="loadComments()">
             <option value="1">1</option>
@@ -128,7 +137,14 @@
           </select>
         </div>
         <div id="comments-list"></div>
-        <button onClick="deleteAllComments()">Delete</button>
+        <div id="deleteAll-button-container">
+          <a class="waves-effect waves-light btn-small pink lighten-3" onClick="deleteAllComments()">
+            <i class="material-icons left">delete</i>
+            Delete all comments
+          </a>
+        </div>
+        </div>
+        
       </div>
       <div class="column side"></div>
     </div>

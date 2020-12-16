@@ -102,15 +102,27 @@ select {
   width: 15%;
 }
 
+label {
+    font-size: small;
+}
+
 label[for="commentsNo"] {
   text-align: right;
   clear: both;
   float: left;
   margin-right: 15px;
-  margin-top: 16px;
+  margin-top: 10px;
 }
 
 #commentsNo-container {
   margin: 10px;
   margin-bottom: 20px;
+}
+
+h5 {
+  margin-top: 35px;
+}
+
+#deleteAll-button-container {
+    margin-top: 15px;
 }
