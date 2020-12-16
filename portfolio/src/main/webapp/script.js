@@ -185,6 +185,7 @@ async function deleteAllComments() {
   commentSectionContainer.style.display = 'none';
 }
 
+/** Load an empty comment section after all comments have been deleted. */
 async function loadAfterDelete() {
   const response = await fetch('/data');
   const comments = await response.json();
