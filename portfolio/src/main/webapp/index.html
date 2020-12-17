@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title>Helena's Portfolio</title>
     <link rel="stylesheet" href="style.css">
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAXHeiUib7BmE7tup3E0FWsn41k1lJMuFs"></script>
     <script src="script.js"></script>
 
     <!--Import Google Icon Font-->
@@ -13,7 +14,7 @@
     <link type="text/css" rel="stylesheet" href="css/materialize.min.css"  media="screen,projection"/>
   </head>
 
-  <body onload="loadComments()">
+  <body onload="onload()">
     <div id="navbar-container"></div>
     <div class="slider">
       <ul class="slides">
@@ -133,25 +134,25 @@
         </form>
         <div id="comments-section" style="display:none">
           <h5>My Comments: </h5>
-         <div id="commentsNo-container">
-          <label for="commentsNo">Number of comments to display: </label>
-          <select name="commentsNo" id="commentsNo" onChange="loadComments()">
-            <option value="1">1</option>
-            <option value="2">2</option>
-            <option value="3" selected="selected">3</option>
-            <option value="4">4</option>
-            <option value="5">5</option>
-          </select>
+          <div id="commentsNo-container">
+            <label for="commentsNo">Number of comments to display: </label>
+            <select name="commentsNo" id="commentsNo" onChange="loadComments()">
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3" selected="selected">3</option>
+              <option value="4">4</option>
+              <option value="5">5</option>
+            </select>
+          </div>
+          <div id="comments-list"></div>
+          <div id="deleteAll-button-container">
+            <a class="waves-effect waves-light btn-small pink lighten-3" onClick="deleteAllComments()">
+              <i class="material-icons left">delete</i>
+              Delete all comments
+            </a>
+          </div>
         </div>
-        <div id="comments-list"></div>
-        <div id="deleteAll-button-container">
-          <a class="waves-effect waves-light btn-small pink lighten-3" onClick="deleteAllComments()">
-            <i class="material-icons left">delete</i>
-            Delete all comments
-          </a>
-        </div>
-        </div>
-        
+        <div id="map"></div>
       </div>
       <div class="column side"></div>
     </div>

@@ -224,3 +224,16 @@ async function getAllComments() {
 function logIn() {
   window.location.href = '/login';
 }
+
+/** Creates a map and adds it to the page. */
+function createMap() {
+  const map = new google.maps.Map(
+      document.getElementById('map'),
+      {center: {lat: 37.422, lng: -122.084}, zoom: 16});
+}
+
+/** Call all functions to be called when onload by body in index.html */
+function onload() {
+  loadComments();
+  createMap();
+}
