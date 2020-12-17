@@ -14,9 +14,12 @@
 
 package com.google.sps.servlets;
 
+import com.google.appengine.api.datastore.*;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
+import com.google.gson.Gson;
 import java.io.IOException;
+import java.io.PrintWriter;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -24,25 +27,67 @@ import javax.servlet.http.HttpServletResponse;
 
 @WebServlet("/login")
 public class AuthenticationServlet extends HttpServlet {
+  Gson gson = new Gson();
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     response.setContentType("text/html");
-
+    PrintWriter out = response.getWriter();
     UserService userService = UserServiceFactory.getUserService();
-    if (userService.isUserLoggedIn()) {
-      String userEmail = userService.getCurrentUser().getEmail();
-      String urlToRedirectToAfterUserLogsOut = "/login";
-      String logoutUrl = userService.createLogoutURL(urlToRedirectToAfterUserLogsOut);
 
-      response.getWriter().println("<p>Hello " + userEmail + "!</p>");
-      response.getWriter().println("<p>Logout <a href=\"" + logoutUrl + "\">here</a>.</p>");
-    } else {
-      String urlToRedirectToAfterUserLogsIn = "/login";
-      String loginUrl = userService.createLoginURL(urlToRedirectToAfterUserLogsIn);
-
-      response.getWriter().println("<p>Hello stranger.</p>");
-      response.getWriter().println("<p>Login <a href=\"" + loginUrl + "\">here</a>.</p>");
+    // If user is not logged in, show a login form.
+    if (!userService.isUserLoggedIn()) {
+      String loginUrl = userService.createLoginURL("/login");
+      out.println("<p>Hello stranger.</p>");
+      out.println("<p>Login <a href=\"" + loginUrl + "\">here</a>.</p>");
+      return;
     }
+
+    // If user has not set a nickname, redirect to nickname page.
+    String nickname = getUserNickname(userService.getCurrentUser().getUserId());
+    if (nickname == null) {
+      response.sendRedirect("/nickname");
+      return;
+    }
+
+    // User is logged in and has a nickname, so the request can proceed.
+    String logoutUrl = userService.createLogoutURL("/login");
+    String userEmail = userService.getCurrentUser().getEmail();
+    out.println("<h1>Home</h1>");
+    out.println("<p>Hello " + nickname + "!</p>");
+    out.println("<p>Email: " + userEmail + "</p>");
+    out.println("<p>Logout <a href=\"" + logoutUrl + "\">here</a>.</p>");
+    out.println("<p>Change your nickname <a href=\"/nickname\">here</a>.</p>");
+  }
+
+  @Override
+    public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+      response.setContentType("text/html");
+
+      UserService userService = UserServiceFactory.getUserService();
+      Boolean isUserLoggedIn;
+      if (userService.isUserLoggedIn()) {
+        isUserLoggedIn = true;
+      } else {
+        isUserLoggedIn = false;
+      }
+      // Send the JSON as response.
+      response.setContentType("application/json;");
+      response.getWriter().println(gson.toJson(isUserLoggedIn));
+    }
+
+  /** Returns the nickname of the user with id, or null if the user has not set a nickname. */
+  private String getUserNickname(String id) {
+    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+    Query query =
+        new Query("UserInfo")
+            .setFilter(new Query.FilterPredicate("id", Query.FilterOperator.EQUAL, id));
+    PreparedQuery results = datastore.prepare(query);
+    Entity entity = results.asSingleEntity();
+    if (entity == null) {
+      return null;
+    }
+    String nickname = (String) entity.getProperty("nickname");
+    return nickname;
   }
 }

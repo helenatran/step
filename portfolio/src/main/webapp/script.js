@@ -32,6 +32,22 @@ document.addEventListener('DOMContentLoaded', async function() {
   else {
     commentSectionContainer.style.display = 'block';
   }
+
+//   Hide comment form and request login if the user is not logged-in
+  const response = await fetch('/login', {method: 'POST'});
+  const isUserLoggedIn = await response.json();
+  console.log(isUserLoggedIn)
+
+  const commentFormContainer = document.getElementById('comment-form');
+  const loginRequestContainer = document.getElementById('login-request');
+  if (isUserLoggedIn) {
+    commentFormContainer.style.display = 'block';
+    loginRequestContainer.style.display = 'none';
+  }
+  else {
+    commentFormContainer.style.display = 'none';
+    loginRequestContainer.style.display = 'block';
+  }
 });
 
 /**
@@ -144,6 +160,9 @@ function createCommentElement(comment) {
   const usernameElement = document.createElement('p');
   usernameElement.innerText = "Username: " + comment.username;
 
+  const emailElement = document.createElement('p');
+  emailElement.innerText = "Email: " + comment.email;
+
   const commentTextElement = document.createElement('p');
   commentTextElement.innerText = "Comment: " + comment.commentText;
 
@@ -161,6 +180,7 @@ function createCommentElement(comment) {
   commentElement.appendChild(subDivElement);
   subDivElement.appendChild(lastDivElement);
   lastDivElement.appendChild(usernameElement);
+  lastDivElement.appendChild(emailElement);
   lastDivElement.appendChild(commentTextElement);
   lastDivElement.appendChild(deleteButtonElement);
 
@@ -200,8 +220,7 @@ async function getAllComments() {
   return comments;
 }
 
-/** ... */
-async function hideComments() {
-  const response = await fetch('/login');
-  console.log('hideComments response:' + response);
+/** Redirect the user to the login page. */
+function logIn() {
+  window.location.href = '/login';
 }
