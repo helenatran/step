@@ -50,7 +50,12 @@ public class DataServlet extends HttpServlet {
       limitNo = results.countEntities(FetchOptions.Builder.withDefaults());
     }
     else {
-      limitNo = Integer.parseInt(limit);
+      try {
+        limitNo = Integer.parseInt(limit);
+      }
+      catch(Exception e) {
+        System.out.printf("The limit value must be an integer, but is %s", limit);
+      }
     }
 
     for (Entity entity : results.asIterable(FetchOptions.Builder.withLimit(limitNo))) {
