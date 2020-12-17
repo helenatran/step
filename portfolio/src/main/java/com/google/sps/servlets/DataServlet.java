@@ -45,7 +45,7 @@ public class DataServlet extends HttpServlet {
 
     List<Comment> comments = new ArrayList<>();
     String limit = request.getParameter("limit");
-    int limitNo;
+    int limitNo = 0;
     if (limit == null) {
       limitNo = results.countEntities(FetchOptions.Builder.withDefaults());
     }
