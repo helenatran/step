@@ -231,10 +231,44 @@ function createMap() {
       document.getElementById('map'),
       {center: {lat: -33.8783, lng: 151.1850}, zoom: 13});
   
-  const utsMarker = new google.maps.Marker({
-    position: {lat: -33.883434, lng: 151.200270},
-    map: map,
-    title: 'UTS'
+  addMarker(
+    map, -33.883434, 151.200270, 'UTS', 
+    'UTS (aka University of Technology Sydney) is where I\'m studying')
+  
+  addMarker(
+    map, -33.8843252, 151.1919149, 'Latin Dance Australia (LDA)',
+    'Latin Dance Australia (LDA) is the dance studio that I go to learn Salsa, Bachata, Reggaeton & Brazilian Funk. This is probably the place I spent the most time after my home!'
+  )
+
+  addMarker(
+    map, -33.8723449, 151.1884446, 'Sydney Fish Market',
+    'Sydney Fish Market. As a big seafood lover, this is one of my favourite places to get fresh seafood!'
+  )
+
+  addMarker(
+    map, -33.9106732, 151.1919489, 'The Grounds of Alexandria',
+    'The Grounds of Alexandria. One of my favourite places in Sydney for Instagrammable pictures and good food!'
+  )
+
+  addMarker(
+    map, -33.8768997, 151.2047383, 'Makoto Sushi Bar',
+    'Makoto Sushi Bar. My favourite sushi place'
+  )
+
+  addMarker(
+    map, -33.8779678, 151.2003195, 'Hakatamon Ramen',
+    'Hakatamon Ramen. My favourite place for Japanese ramen'
+  )
+}
+
+/** Adds a marker that shows an info window when clicked. */
+function addMarker(map, lat, lng, title, description) {
+  const marker = new google.maps.Marker(
+      {position: {lat: lat, lng: lng}, map: map, title: title});
+
+  const infoWindow = new google.maps.InfoWindow({content: description});
+  marker.addListener('click', () => {
+    infoWindow.open(map, marker);
   });
 }
 
