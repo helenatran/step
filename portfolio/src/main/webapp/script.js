@@ -229,7 +229,13 @@ function logIn() {
 function createMap() {
   const map = new google.maps.Map(
       document.getElementById('map'),
-      {center: {lat: 37.422, lng: -122.084}, zoom: 16});
+      {center: {lat: -33.8783, lng: 151.1850}, zoom: 13});
+  
+  const utsMarker = new google.maps.Marker({
+    position: {lat: -33.883434, lng: 151.200270},
+    map: map,
+    title: 'UTS'
+  });
 }
 
 /** Call all functions to be called when onload by body in index.html */
