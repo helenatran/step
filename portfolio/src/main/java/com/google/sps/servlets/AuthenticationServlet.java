@@ -25,6 +25,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+/** Servlet responsible for authentication. */
 @WebServlet("/login")
 public class AuthenticationServlet extends HttpServlet {
   Gson gson = new Gson();

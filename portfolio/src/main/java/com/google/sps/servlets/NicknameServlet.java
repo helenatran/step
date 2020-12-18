@@ -28,6 +28,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+/** Servlet responsible for creating and assigning nickname to a logged-in user. */
 @WebServlet("/nickname")
 public class NicknameServlet extends HttpServlet {
 
