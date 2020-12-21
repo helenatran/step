@@ -47,20 +47,20 @@ public class DataServlet extends HttpServlet {
 
     List<Comment> comments = new ArrayList<>();
     String limit = request.getParameter("limit");
-    int limitNo = 0;
+    int limitNumber = 0;
     if (limit == null) {
-      limitNo = results.countEntities(FetchOptions.Builder.withDefaults());
+      limitNumber = results.countEntities(FetchOptions.Builder.withDefaults());
     }
     else {
       try {
-        limitNo = Integer.parseInt(limit);
+        limitNumber = Integer.parseInt(limit);
       }
       catch(Exception e) {
-        System.out.printf("The limit value must be an integer, but is %s", limit);
+        System.out.printf("Error: ", e, ". The limit value must be an integer, but is %s", limit);
       }
     }
 
-    for (Entity entity : results.asIterable(FetchOptions.Builder.withLimit(limitNo))) {
+    for (Entity entity : results.asIterable(FetchOptions.Builder.withLimit(limitNumber))) {
       long id = entity.getKey().getId();
       String username = (String) entity.getProperty("username");
       String email = (String) entity.getProperty("email");

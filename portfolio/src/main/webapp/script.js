@@ -14,9 +14,9 @@
 
 document.addEventListener('DOMContentLoaded', async function() {
   // Initialise the slider (index.html) and the material box (photoGallery.html)
-  elems_one = document.querySelectorAll('.slider');
+  const elems_one = document.querySelectorAll('.slider');
   instances_one = M.Slider.init(elems_one);
-  elems_two = document.querySelectorAll('.materialboxed');
+  const elems_two = document.querySelectorAll('.materialboxed');
   instances_two = M.Materialbox.init(elems_two);
 
   // Load Navigation Bar and Footer when loading page
@@ -134,8 +134,8 @@ function getAboutMe(aboutMeId) {
 
 /** Fetches comments from the server and add them to the DOM. */
 async function loadComments() {
-    limitNo = document.getElementById('commentsNo').value;
-    const response = await fetch('/data?limit=' + limitNo);
+    limitNumber = document.getElementById('commentsNumber').value;
+    const response = await fetch('/data?limit=' + limitNumber);
     const comments = await response.json();
 
     commentListElement = document.getElementById('comments-list');

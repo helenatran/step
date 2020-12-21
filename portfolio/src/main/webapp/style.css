@@ -106,7 +106,7 @@ label {
     font-size: small;
 }
 
-label[for="commentsNo"] {
+label[for="commentsNumber"] {
   text-align: right;
   clear: both;
   float: left;
@@ -114,7 +114,7 @@ label[for="commentsNo"] {
   margin-top: 10px;
 }
 
-#commentsNo-container {
+#comments-number-container {
   margin: 10px;
   margin-bottom: 20px;
 }
