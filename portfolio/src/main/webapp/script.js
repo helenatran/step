@@ -15,9 +15,9 @@
 document.addEventListener('DOMContentLoaded', async function() {
   // Initialise the slider (index.html) and the material box (photoGallery.html)
   const elems_one = document.querySelectorAll('.slider');
-  instances_one = M.Slider.init(elems_one);
+  const instances_one = M.Slider.init(elems_one);
   const elems_two = document.querySelectorAll('.materialboxed');
-  instances_two = M.Materialbox.init(elems_two);
+  const instances_two = M.Materialbox.init(elems_two);
 
   // Load Navigation Bar and Footer when loading page
   document.getElementById('navbar-container').innerHTML='<object type="text/html" data="navBar.html" width="100%" height="73"></object>'
@@ -119,7 +119,7 @@ function getAboutMe(aboutMeId) {
 
 /** Fetches comments from the server and add them to the DOM. */
 async function loadComments() {
-    limitNumber = document.getElementById('commentsNumber').value;
+    const limitNumber = document.getElementById('commentsNumber').value;
     const response = await fetch('/data?limit=' + limitNumber);
     const comments = await response.json();
 
@@ -135,10 +135,10 @@ function createCommentElement(comment) {
   const commentElement = document.createElement('div');
   commentElement.className = 'card horizontal';
 
-  subDivElement = document.createElement('div');
+  const subDivElement = document.createElement('div');
   subDivElement.className= 'card-stacked';
 
-  lastDivElement = document.createElement('div');
+  const lastDivElement = document.createElement('div');
   lastDivElement.className = 'card-content';
 
   const usernameElement = document.createElement('p');
