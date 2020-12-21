@@ -32,8 +32,11 @@ public final class FindMeetingQuery {
       return Arrays.asList();
     }
 
-    // If there is an event during the day, the possible times are before and after the event.
-    if (!events.isEmpty()) {
+    /**
+     * If there is an event during the day, the possible times are before and after the event.
+     * ToDo(Helena): consider when there are more than 1 event
+     */
+    if (events.size() == 1) {
       Collection<TimeRange> possibleTimes = new ArrayList<>();
       for (Event event : events) {
         possibleTimes.add(TimeRange.fromStartEnd(TimeRange.START_OF_DAY, event.getWhen().start(), false));
@@ -42,6 +45,13 @@ public final class FindMeetingQuery {
       return possibleTimes;
     }
 
+    /**
+     * If there are 2 attendees, the possible times are the ones in-between their events.
+     * ToDo(Helena):
+     *  - First, implement the function as stated above, then: 
+     *  - Consider when there are more than 2 attendees.
+     *  - Consider when they have more than 1 event per attendee.
+     */
     throw new UnsupportedOperationException("TODO: Implement this method.");
   }
 }
