@@ -33,10 +33,9 @@ document.addEventListener('DOMContentLoaded', async function() {
     commentSectionContainer.style.display = 'block';
   }
 
-//   Hide comment form and request login if the user is not logged-in
+//   Hide comment form if the user is not logged-in
   const response = await fetch('/login', {method: 'POST'});
   const isUserLoggedIn = await response.json();
-  console.log(isUserLoggedIn)
 
   const commentFormContainer = document.getElementById('comment-form');
   const loginRequestContainer = document.getElementById('login-request');
@@ -225,62 +224,130 @@ function logIn() {
   window.location.href = '/login';
 }
 
-/** Creates a map and adds it to the page. */
-async function createMap() {
+/** Creates my map and add it to the page. */
+async function createMyMap() {
   const response = await fetch('/map-data');
   const mapMarkers = await response.json();
 
   const map = new google.maps.Map(
-      document.getElementById('map'),
+      document.getElementById('my-map'),
       {center: {lat: -33.8783, lng: 151.1850}, zoom: 13});
   
   mapMarkers.forEach((marker) => {
     addMarker(map, marker.lat, marker.lng, marker.title, marker.description);
   })
+}
+
+// Initialise the map for the user to add markers
+let yourMap;
+
+/** Creates a map for the other users and add it to the page. */
+async function createYourMap() {
+  yourMap = new google.maps.Map(
+    document.getElementById('your-map'),
+    {center: {lat: -33.8783, lng: 151.1850}, zoom: 13});
+
+  // When the user clicks in the map, show a marker with a text box the user can edit.
+  yourMap.addListener('click', (event) => {
+    createMarkerForEdit(event.latLng.lat(), event.latLng.lng());
+  });
   
-  // addMarker(
-  //   map, -33.883434, 151.200270, 'UTS', 
-  //   'UTS (aka University of Technology Sydney) is where I\'m studying')
-  
-  // addMarker(
-  //   map, -33.8843252, 151.1919149, 'Latin Dance Australia (LDA)',
-  //   'Latin Dance Australia (LDA) is the dance studio that I go to learn Salsa, Bachata, Reggaeton & Brazilian Funk. This is probably the place I spent the most time after my home!'
-  // )
+  const response = await fetch('/your-map-data');
+  const mapMarkers = await response.json();
 
-  // addMarker(
-  //   map, -33.8723449, 151.1884446, 'Sydney Fish Market',
-  //   'Sydney Fish Market. As a big seafood lover, this is one of my favourite places to get fresh seafood!'
-  // )
+  mapMarkers.forEach((marker) => {
+    addMarker(yourMap, marker.lat, marker.lng, marker.title, marker.description);
+  });
+}
 
-  // addMarker(
-  //   map, -33.9106732, 151.1919489, 'The Grounds of Alexandria',
-  //   'The Grounds of Alexandria. One of my favourite places in Sydney for Instagrammable pictures and good food!'
-  // )
-
-  // addMarker(
-  //   map, -33.8768997, 151.2047383, 'Makoto Sushi Bar',
-  //   'Makoto Sushi Bar. My favourite sushi place'
-  // )
-
-  // addMarker(
-  //   map, -33.8779678, 151.2003195, 'Hakatamon Ramen',
-  //   'Hakatamon Ramen. My favourite place for Japanese ramen'
-  // )
+/** Load both maps. */
+function loadMaps() {
+  createMyMap();
+  createYourMap();
 }
 
 /** Adds a marker that shows an info window when clicked. */
 function addMarker(map, lat, lng, title, description) {
   const marker = new google.maps.Marker(
       {position: {lat: lat, lng: lng}, map: map, title: title});
-
-  const infoWindow = new google.maps.InfoWindow({content: description});
+  
+  const infoWindowContent = createInfoWindow(title, description);
+  const infoWindow = new google.maps.InfoWindow({content: infoWindowContent});
   marker.addListener('click', () => {
     infoWindow.open(map, marker);
   });
 }
 
-/** Call all functions to be called when onload by body in index.html */
-function onload() {
-  loadComments();
-  createMap();
+/** Creates an element that represents the content of an info window. */
+function createInfoWindow(title, description) {
+  const divElement = document.createElement('div');
+
+  const titleElement = document.createElement('h6');
+  titleElement.innerText = title;
+
+  const descriptionElement = document.createElement('p');
+  descriptionElement.innerText = description;
+
+  divElement.appendChild(titleElement);
+  divElement.appendChild(descriptionElement);
+
+  return divElement;
+
+}
+
+/* Editable marker that displays when a user clicks in the map. */
+let editMarker;
+
+/** Creates a marker that shows a textbox the user can edit. */
+function createMarkerForEdit(lat, lng) {
+  // If we're already showing an editable marker, then remove it.
+  if (editMarker) {
+    editMarker.setMap(null);
+  }
+
+  editMarker =
+      new google.maps.Marker({position: {lat: lat, lng: lng}, map: yourMap});
+
+  const infoWindow =
+      new google.maps.InfoWindow({content: buildInfoWindowInput(lat, lng)});
+
+  // When the user closes the editable info window, remove the marker.
+  google.maps.event.addListener(infoWindow, 'closeclick', () => {
+    editMarker.setMap(null);
+  });
+
+  infoWindow.open(yourMap, editMarker);
+}
+
+/**
+ * Builds and returns HTML elements that show an editable textbox and a submit
+ * button.
+ */
+function buildInfoWindowInput(lat, lng) {
+  const textBoxElement = document.createElement('textarea');
+  const buttonElement = document.createElement('button');
+  buttonElement.appendChild(document.createTextNode('Submit'));
+  
+  buttonElement.onclick = () => {
+    postMarker(lat, lng, textBoxElement.value);
+    addMarker(yourMap, lat, lng, '', textBoxElement.value);
+    editMarker.setMap(null);
+  };
+
+  const containerDiv = document.createElement('div');
+  containerDiv.appendChild(textBoxElement);
+  containerDiv.appendChild(document.createElement('br'));
+  containerDiv.appendChild(buttonElement);
+
+  return containerDiv;
+}
+
+/** Sends a marker to the backend for saving. */
+function postMarker(lat, lng, description) {
+  const params = new URLSearchParams();
+  params.append('lat', lat);
+  params.append('lng', lng);
+  params.append('description', description);
+
+  fetch('/your-map-data', {method: 'POST', body: params});
 }
