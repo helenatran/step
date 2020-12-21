@@ -29,6 +29,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import com.google.appengine.api.datastore.FetchOptions;
 
 // Servlet responsible for creating and displaying comments.
 @WebServlet("/data")
@@ -43,7 +44,21 @@ public class DataServlet extends HttpServlet {
     PreparedQuery results = datastore.prepare(query);
 
     List<Comment> comments = new ArrayList<>();
-    for (Entity entity : results.asIterable()) {
+    String limit = request.getParameter("limit");
+    int limitNumber = 0;
+    if (limit == null) {
+      limitNumber = results.countEntities(FetchOptions.Builder.withDefaults());
+    }
+    else {
+      try {
+        limitNumber = Integer.parseInt(limit);
+      }
+      catch(Exception e) {
+        System.out.printf("Error: ", e, ". The limit value must be an integer, but is %s", limit);
+      }
+    }
+
+    for (Entity entity : results.asIterable(FetchOptions.Builder.withLimit(limitNumber))) {
       long id = entity.getKey().getId();
       String username = (String) entity.getProperty("username");
       String commentText = (String) entity.getProperty("commentText");

@@ -12,16 +12,26 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', async function() {
   // Initialise the slider (index.html) and the material box (photoGallery.html)
-  elems_one = document.querySelectorAll('.slider');
-  instances_one = M.Slider.init(elems_one);
-  elems_two = document.querySelectorAll('.materialboxed');
-  instances_two = M.Materialbox.init(elems_two);
+  const elems_one = document.querySelectorAll('.slider');
+  const instances_one = M.Slider.init(elems_one);
+  const elems_two = document.querySelectorAll('.materialboxed');
+  const instances_two = M.Materialbox.init(elems_two);
 
-  //Load Navigation Bar and Footer when loading page
+  // Load Navigation Bar and Footer when loading page
   document.getElementById('navbar-container').innerHTML='<object type="text/html" data="navBar.html" width="100%" height="73"></object>'
   document.getElementById('footer-container').innerHTML='<object type="text/html" data="footer.html" width="100%" height="115"></object>'
+
+  // Hide comment section if there is no comment
+  const commentSectionContainer = document.getElementById('comments-section');
+  const comments = await getAllComments();
+  if (comments.length === 0) {
+    commentSectionContainer.style.display = 'none';
+  }
+  else {
+    commentSectionContainer.style.display = 'block';
+  }
 });
 
 /**
@@ -109,10 +119,12 @@ function getAboutMe(aboutMeId) {
 
 /** Fetches comments from the server and add them to the DOM. */
 async function loadComments() {
-    const response = await fetch('/data');
+    const limitNumber = document.getElementById('commentsNumber').value;
+    const response = await fetch('/data?limit=' + limitNumber);
     const comments = await response.json();
 
-    const commentListElement = document.getElementById('comments-list');
+    commentListElement = document.getElementById('comments-list');
+    commentListElement.innerHTML = '';
     comments.forEach((comment) => {
         commentListElement.appendChild(createCommentElement(comment));
     })
@@ -120,28 +132,38 @@ async function loadComments() {
 
 /** Creates an element that represents a comment, including its delete button. */
 function createCommentElement(comment) {
-  const commentElement = document.createElement('li');
-  commentElement.className = 'comment';
+  const commentElement = document.createElement('div');
+  commentElement.className = 'card horizontal';
 
-  const usernameElement = document.createElement('span');
+  const subDivElement = document.createElement('div');
+  subDivElement.className= 'card-stacked';
+
+  const lastDivElement = document.createElement('div');
+  lastDivElement.className = 'card-content';
+
+  const usernameElement = document.createElement('p');
   usernameElement.innerText = "Username: " + comment.username;
 
-  const commentTextElement = document.createElement('span');
-  commentTextElement.innerText = "; Comment: " + comment.commentText + " ";
+  const commentTextElement = document.createElement('p');
+  commentTextElement.innerText = "Comment: " + comment.commentText;
 
-  const deleteButtonElement = document.createElement('button');
-  deleteButtonElement.innerText = 'Delete';
-
+  const deleteButtonElement = document.createElement('a');
+  deleteButtonElement.className = 'waves-effect waves-light btn-small pink lighten-3';
+  deleteButtonElement.setAttribute('style', 'float:right; margin-top:-50px;')
+  deleteButtonElement.innerHTML = '<i class="material-icons">delete</i>';
   deleteButtonElement.addEventListener('click', () => {
     deleteComment(comment);
 
     // Remove the task from the DOM.
-    commentElement.remove();
+    commentElement.remove()
   });
 
-  commentElement.appendChild(usernameElement);
-  commentElement.appendChild(commentTextElement);
-  commentElement.appendChild(deleteButtonElement);
+  commentElement.appendChild(subDivElement);
+  subDivElement.appendChild(lastDivElement);
+  lastDivElement.appendChild(usernameElement);
+  lastDivElement.appendChild(commentTextElement);
+  lastDivElement.appendChild(deleteButtonElement);
+
   return commentElement;
 }
 
@@ -150,4 +172,30 @@ function deleteComment(comment) {
   const params = new URLSearchParams();
   params.append('id', comment.id);
   fetch('/delete-data', {method: 'POST', body: params});
+}
+
+/** Tells the server to delete all the comments. */
+async function deleteAllComments() {
+  const comments = await getAllComments();
+  for (i = 0; i < comments.length; i++) {
+    deleteComment(comments[i]);
+  }
+  await loadAfterDelete();
+  const commentSectionContainer = document.getElementById('comments-section');
+  commentSectionContainer.style.display = 'none';
+}
+
+/** Load an empty comment section after all comments have been deleted. */
+async function loadAfterDelete() {
+  const response = await fetch('/data');
+  const comments = await response.json();
+  commentListElement = document.getElementById('comments-list');
+  commentListElement.innerHTML = '';
+}
+
+/** Get all comments. */
+async function getAllComments() {
+  const response = await fetch('/data');
+  const comments = await response.json();
+  return comments;
 }

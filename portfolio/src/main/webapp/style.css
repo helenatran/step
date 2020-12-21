@@ -96,3 +96,33 @@ footer img {
 #footer-banner {
   font-size: 30px;
 }
+
+select {
+  display: block;
+  width: 15%;
+}
+
+label {
+    font-size: small;
+}
+
+label[for="commentsNumber"] {
+  text-align: right;
+  clear: both;
+  float: left;
+  margin-right: 15px;
+  margin-top: 10px;
+}
+
+#comments-number-container {
+  margin: 10px;
+  margin-bottom: 20px;
+}
+
+h5 {
+  margin-top: 35px;
+}
+
+#deleteAll-button-container {
+    margin-top: 15px;
+}
