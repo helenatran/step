@@ -14,10 +14,34 @@
 
 package com.google.sps;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashSet;
 
 public final class FindMeetingQuery {
+  // Return the times when the meeting could happen that day.
   public Collection<TimeRange> query(Collection<Event> events, MeetingRequest request) {
+    // If the request has no compulsory attendees and there are no events on the day, meeting can be done at any time.
+    if (request.getAttendees().isEmpty() && events.isEmpty()) {
+      return Arrays.asList(TimeRange.WHOLE_DAY);
+    }
+
+    // If the request has the meeting's duration longer than a day, there are no possible options.
+    if (request.getDuration() > TimeRange.WHOLE_DAY.duration()) {
+      return Arrays.asList();
+    }
+
+    // If there is an event during the day, the possible times are before and after the event.
+    if (!events.isEmpty()) {
+      Collection<TimeRange> possibleTimes = new ArrayList<>();
+      for (Event event : events) {
+        possibleTimes.add(TimeRange.fromStartEnd(TimeRange.START_OF_DAY, event.getWhen().start(), false));
+        possibleTimes.add(TimeRange.fromStartEnd(event.getWhen().end(), TimeRange.END_OF_DAY, true));
+      }
+      return possibleTimes;
+    }
+
     throw new UnsupportedOperationException("TODO: Implement this method.");
   }
 }
