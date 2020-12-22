@@ -23,14 +23,16 @@ import java.util.Iterator;
 public final class FindMeetingQuery {
   // Return the times when the meeting could happen that day.
   public Collection<TimeRange> query(Collection<Event> events, MeetingRequest request) {
-    // If the request has no compulsory attendees and there are no events on the day, meeting can be done at any time.
-    if (request.getAttendees().isEmpty() && events.isEmpty()) {
-      return Arrays.asList(TimeRange.WHOLE_DAY);
-    }
+    if (events.isEmpty()) {
+      // If the request has the meeting's duration longer than a day, there are no possible options.
+      if (request.getDuration() > TimeRange.WHOLE_DAY.duration()) {
+        return Arrays.asList();
+      }
 
-    // If the request has the meeting's duration longer than a day, there are no possible options.
-    if (request.getDuration() > TimeRange.WHOLE_DAY.duration()) {
-      return Arrays.asList();
+      // If there are no events and the duration given is not longer than a day, the whole day is available to set up a meeting. 
+      else {
+        return Arrays.asList(TimeRange.WHOLE_DAY);
+      }
     }
 
     /**
@@ -73,39 +75,41 @@ public final class FindMeetingQuery {
       Event firstEvent = it.next();
       Event secondEvent = it.next();
 
-      // If one person's event fully contains another's event (nested events), there are 2 possible times: before and after the first event.
-      if (firstEvent.getWhen().end() > secondEvent.getWhen().start()
-          && firstEvent.getWhen().end() > secondEvent.getWhen().end()) {
-        possibleTimes.add(TimeRange.fromStartEnd(TimeRange.START_OF_DAY, firstEvent.getWhen().start(), false));
-        possibleTimes.add(TimeRange.fromStartEnd(firstEvent.getWhen().end(), TimeRange.END_OF_DAY, true));
-        return possibleTimes;
+      if ((secondEvent.getWhen().start() - firstEvent.getWhen().end()) < request.getDuration()) {
+        // If one person's event fully contains another's event (nested events), there are 2 possible times: before and after the first event.
+        if (firstEvent.getWhen().end() > secondEvent.getWhen().start()
+            && firstEvent.getWhen().end() > secondEvent.getWhen().end()) {
+          possibleTimes.add(TimeRange.fromStartEnd(TimeRange.START_OF_DAY, firstEvent.getWhen().start(), false));
+          possibleTimes.add(TimeRange.fromStartEnd(firstEvent.getWhen().end(), TimeRange.END_OF_DAY, true));
+          return possibleTimes;
+        }
+        // If the events are overlapping, there are 2 possible times: before the first event and after the second event.
+        else if (firstEvent.getWhen().end() > secondEvent.getWhen().start()) {
+          possibleTimes.add(TimeRange.fromStartEnd(TimeRange.START_OF_DAY, firstEvent.getWhen().start(), false));
+          possibleTimes.add(TimeRange.fromStartEnd(secondEvent.getWhen().end(), TimeRange.END_OF_DAY, true));
+          return possibleTimes;
+        }  
+        else {
+          return Arrays.asList();
+        }
       }
-
-      // If the events are overlapping, there are 2 possible times: before the first event and after the second event.
-      else if (firstEvent.getWhen().end() > secondEvent.getWhen().start()) {
-        possibleTimes.add(TimeRange.fromStartEnd(TimeRange.START_OF_DAY, firstEvent.getWhen().start(), false));
-        possibleTimes.add(TimeRange.fromStartEnd(secondEvent.getWhen().end(), TimeRange.END_OF_DAY, true));
-        return possibleTimes;
-      }
-
+      
       /**
        * If the events are not overlapping but the first meeting starts at the start of the day and
        * the second meeting ends at the end of the day, we have 1 possible time: between these events.
        */
-      else if (firstEvent.getWhen().start() == TimeRange.START_OF_DAY
-          && secondEvent.getWhen().end() == TimeRange.END_OF_DAY+1) {
+      if (firstEvent.getWhen().start() == TimeRange.START_OF_DAY
+          && secondEvent.getWhen().end() == TimeRange.END_OF_DAY + 1) {
         int duration = Math.toIntExact(request.getDuration());
         possibleTimes.add(TimeRange.fromStartDuration(firstEvent.getWhen().end(), duration));
         return possibleTimes;
       }
 
       // If the events are not overlapping and start/end in the middle of the day, there 3 possible times (in-between the events).
-      else {
-        possibleTimes.add(TimeRange.fromStartEnd(TimeRange.START_OF_DAY, firstEvent.getWhen().start(), false));
-        possibleTimes.add(TimeRange.fromStartEnd(firstEvent.getWhen().end(), secondEvent.getWhen().start(), false));
-        possibleTimes.add(TimeRange.fromStartEnd(secondEvent.getWhen().end(), TimeRange.END_OF_DAY, true));
-        return possibleTimes;
-      }
+      possibleTimes.add(TimeRange.fromStartEnd(TimeRange.START_OF_DAY, firstEvent.getWhen().start(), false));
+      possibleTimes.add(TimeRange.fromStartEnd(firstEvent.getWhen().end(), secondEvent.getWhen().start(), false));
+      possibleTimes.add(TimeRange.fromStartEnd(secondEvent.getWhen().end(), TimeRange.END_OF_DAY, true));
+      return possibleTimes;
     }
 
     throw new UnsupportedOperationException("TODO: Implement this method.");
