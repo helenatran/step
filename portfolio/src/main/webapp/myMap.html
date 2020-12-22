@@ -5,23 +5,6 @@
     <title>My Map</title>
     <link rel="stylesheet" href="style.css">
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAXHeiUib7BmE7tup3E0FWsn41k1lJMuFs"></script>
-    <script>
-      document.addEventListener('DOMContentLoaded', async function() {
-        const response = await fetch('/login', {method: 'POST'});
-        const isUserLoggedIn = await response.json();
-
-        const mapLoginRequestContainer = document.getElementById('map-login-request');
-        const yourMapContainer = document.getElementById('your-map');
-        if (isUserLoggedIn) {
-          yourMapContainer.style.display = 'block';
-          mapLoginRequestContainer.style.display = 'none';
-        }
-        else {
-          yourMapContainer.style.display = 'none';
-          mapLoginRequestContainer.style.display = 'block';
-        }
-      })
-    </script>
     <script src="script.js"></script>
 
     <!--Import Google Icon Font-->

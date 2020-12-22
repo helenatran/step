@@ -40,12 +40,16 @@ public class MapDataServlet extends HttpServlet {
       String line = scanner.nextLine();
       String[] cells = line.split(",");
 
-      double lat = Double.parseDouble(cells[0]);
-      double lng = Double.parseDouble(cells[1]);
-      String title = cells[2];
-      String description = cells[3];
-
-      mapMarkers.add(new MapMarker(lat, lng, title, description));
+      if (cells.length == 4) {
+        double lat = Double.parseDouble(cells[0]);
+        double lng = Double.parseDouble(cells[1]);
+        String title = cells[2];
+        String description = cells[3];
+        mapMarkers.add(new MapMarker(lat, lng, title, description));
+      }
+      else {
+        System.out.println("There are missing data. Make sure you have provided the lat, lng, title, and description of the marker.");
+      }      
     }
     scanner.close();
   }

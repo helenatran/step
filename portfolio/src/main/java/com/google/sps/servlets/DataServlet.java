@@ -24,6 +24,7 @@ import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
 import com.google.gson.Gson;
 import com.google.sps.data.Comment;
+import com.google.sps.data.FunctionsLibrary;
 import java.io.IOException;
 import java.util.List;
 import java.util.ArrayList;
@@ -88,7 +89,7 @@ public class DataServlet extends HttpServlet {
     }
 
     // Get inputs from the form.
-    String username = getUserNickname(userService.getCurrentUser().getUserId());
+    String username = FunctionsLibrary.getUserNickname(userService.getCurrentUser().getUserId());
     String email = userService.getCurrentUser().getEmail();
     String commentText = request.getParameter("commentText");
     long timestamp = System.currentTimeMillis();
@@ -103,20 +104,5 @@ public class DataServlet extends HttpServlet {
     datastore.put(commentEntity);
 
     response.sendRedirect("/index.html");
-  }
-
-  /** Returns the nickname of the user with id, or null if the user has not set a nickname. */
-  private String getUserNickname(String id) {
-    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-    Query query =
-        new Query("UserInfo")
-            .setFilter(new Query.FilterPredicate("id", Query.FilterOperator.EQUAL, id));
-    PreparedQuery results = datastore.prepare(query);
-    Entity entity = results.asSingleEntity();
-    if (entity == null) {
-      return null;
-    }
-    String nickname = (String) entity.getProperty("nickname");
-    return nickname;
   }
 }

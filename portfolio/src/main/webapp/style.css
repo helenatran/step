@@ -8,11 +8,15 @@ h4 {
 }
 
 .content {
-    background-color: #f48fb1;
+  background-color: #f48fb1;
 }
 
 #navbar-container {
-    height: 64px;
+  height: 64px;
+}
+
+#nav-mobile {
+  list-style-type: none;
 }
 
 .column {
