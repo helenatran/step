@@ -24,6 +24,7 @@ import java.util.List;
 public final class FindMeetingQuery {
   // Return the possible times at which the meeting be set on the day.
   public Collection<TimeRange> query(Collection<Event> events, MeetingRequest request) {
+
     if (events.isEmpty() || request.getAttendees().isEmpty()) {
       // If the request has a meeting's duration longer than a day, there are no possible options.
       if (request.getDuration() > TimeRange.WHOLE_DAY.duration()) {
@@ -39,16 +40,18 @@ public final class FindMeetingQuery {
     // All the possible times to arrange a meeting on the day.
     List<TimeRange> possibleTimes = new ArrayList<>();
 
-    // All the people who are quired to attend the meeting. 
+    // All the people who are required to attend the meeting. 
     Collection<String> requestAttendees = request.getAttendees();
 
-    // Events with required attendees. Use a set to avoid duplicates.
-    Collection<Event> requiredEvents = new HashSet<>();
+    // Events with required attendees. We assume events are always added in a chronological order. 
+    List<Event> requiredEvents = new ArrayList<>();
 
     for (Event event : events) {
       for (String requiredAttendee : requestAttendees) {
         if (event.getAttendees().contains(requiredAttendee)) {
-          requiredEvents.add(event);
+          if (!requiredEvents.contains(event)) {
+            requiredEvents.add(event);
+          }
         }
       }
     }
@@ -64,65 +67,57 @@ public final class FindMeetingQuery {
         return possibleTimes;
       }
 
-      // for (Event event : requiredEvents) {
-      //   if (!possibleTimes.isEmpty()) {
+      for (int counter = 0; counter < requiredEvents.size(); counter++) {
+        Event currentEvent = requiredEvents.get(counter);
 
-      //   }
-      //   else {
-      //     possibleTimes.add(TimeRange.fromStartEnd(TimeRange.START_OF_DAY, event.getWhen().start(), false));
-      //     possibleTimes.add(TimeRange.fromStartEnd(event.getWhen().end(), TimeRange.END_OF_DAY, true));
-      //   }
-       
-      // }
+        // If the array is not empty, then it means there was one event before this one. 
+        if (!possibleTimes.isEmpty()) {
+          Event previousEvent = requiredEvents.get(counter - 1);
+      
+          // Remove the last added timerange to consider the unavailability due to the current event. 
+          possibleTimes.remove(possibleTimes.size() - 1);
 
-      // This assumes there are 2 events with required attendees 
-      if (requiredEvents.size() == 2) {
-        Iterator<Event> it = events.iterator();
-        Event firstEvent = it.next();
-        Event secondEvent = it.next();
-
-        if ((secondEvent.getWhen().start() - firstEvent.getWhen().end()) < request.getDuration()) {
-          // If one person's event fully contains another's event (nested events), there are 2 possible times: before and after the first event.
-          if (firstEvent.getWhen().end() > secondEvent.getWhen().start()
-              && firstEvent.getWhen().end() > secondEvent.getWhen().end()) {
-            possibleTimes.add(TimeRange.fromStartEnd(TimeRange.START_OF_DAY, firstEvent.getWhen().start(), false));
-            possibleTimes.add(TimeRange.fromStartEnd(firstEvent.getWhen().end(), TimeRange.END_OF_DAY, true));
-            return possibleTimes;
+          // If one event fully contains another (nested event), there are 2 possible times: before and after the longest event. 
+          if (previousEvent.getWhen().end() > currentEvent.getWhen().start()
+              && previousEvent.getWhen().end() > currentEvent.getWhen().end()) {
+            possibleTimes.add(TimeRange.fromStartEnd(previousEvent.getWhen().end(), TimeRange.END_OF_DAY, true));
+            break;
           }
-          // If the events are overlapping, there are 2 possible times: before the first event and after the second event.
-          else if (firstEvent.getWhen().end() > secondEvent.getWhen().start()) {
-            possibleTimes.add(TimeRange.fromStartEnd(TimeRange.START_OF_DAY, firstEvent.getWhen().start(), false));
-            possibleTimes.add(TimeRange.fromStartEnd(secondEvent.getWhen().end(), TimeRange.END_OF_DAY, true));
-            return possibleTimes;
-          } else {
-            return Arrays.asList();
+          
+          // If events have no conflict, there are 3 possible times: before the first one, between the 2 events and after the second one.
+          if (previousEvent.getWhen().end() < currentEvent.getWhen().start()) {
+            // Duration available in between events. 
+            long durationBetweenEvents = currentEvent.getWhen().start() - previousEvent.getWhen().end();
+            
+            // Check if the requested duration matches with the time available in between events. 
+            if (request.getDuration() <= durationBetweenEvents) {
+              possibleTimes.add(TimeRange.fromStartEnd(previousEvent.getWhen().end(), currentEvent.getWhen().start(), false));
+            }
           }
+          
+          // If the end of the event is not the end of the day, then the time in between is a possible time. 
+          if (currentEvent.getWhen().end() != TimeRange.END_OF_DAY + 1) {
+            possibleTimes.add(TimeRange.fromStartEnd(currentEvent.getWhen().end(), TimeRange.END_OF_DAY, true));
+          }
+          
         }
-
-        /**
-         * If the events are not overlapping but the first meeting starts at the start of the day and
-         * the second meeting ends at the end of the day, we have 1 possible time: between these events.
-         */
-        if (firstEvent.getWhen().start() == TimeRange.START_OF_DAY
-            && secondEvent.getWhen().end() == TimeRange.END_OF_DAY + 1) {
-          int duration = Math.toIntExact(request.getDuration());
-          possibleTimes.add(TimeRange.fromStartDuration(firstEvent.getWhen().end(), duration));
-          return possibleTimes;
+        
+        // If there were no previous times, then this event is the first one of the day. The possible times are before and after the event.
+        else {
+          // If the first event of the day starts at the beginning of the day, there are no availabilities before it. 
+          if (currentEvent.getWhen().start() != TimeRange.START_OF_DAY) {
+            possibleTimes.add(
+                TimeRange.fromStartEnd(TimeRange.START_OF_DAY, currentEvent.getWhen().start(), false));
+          }
+          possibleTimes.add(TimeRange.fromStartEnd(currentEvent.getWhen().end(), TimeRange.END_OF_DAY, true));
         }
-
-        // If the events are not overlapping and start/end in the middle of the day, there 3 possible times (in-between the events).
-        possibleTimes.add(TimeRange.fromStartEnd(TimeRange.START_OF_DAY, firstEvent.getWhen().start(), false));
-        possibleTimes.add(TimeRange.fromStartEnd(firstEvent.getWhen().end(), secondEvent.getWhen().start(), false));
-        possibleTimes.add(TimeRange.fromStartEnd(secondEvent.getWhen().end(), TimeRange.END_OF_DAY, true));
-        return possibleTimes;
       }
+      return possibleTimes;
     }
     
     // If none of the events have required attendees, the whole day is available. 
     else {
       return Arrays.asList(TimeRange.WHOLE_DAY);
     }
-
-    throw new UnsupportedOperationException("There is an error. Ensure your meeting request is correct.");
   }
 }
