@@ -21,6 +21,7 @@ import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
+import com.google.sps.data.FunctionsLibrary;
 import com.google.sps.data.MapMarker;
 import com.google.gson.Gson;
 import java.io.IOException;
@@ -76,7 +77,7 @@ public class YourMapServlet extends HttpServlet {
     // Get inputs from the form.
     double lat = Double.parseDouble(request.getParameter("lat"));
     double lng = Double.parseDouble(request.getParameter("lng"));
-    String title = getUserNickname(userService.getCurrentUser().getUserId());
+    String title = FunctionsLibrary.getUserNickname(userService.getCurrentUser().getUserId());
     String description = request.getParameter("description");
 
     MapMarker marker = new MapMarker(lat, lng, title, description);
@@ -91,20 +92,5 @@ public class YourMapServlet extends HttpServlet {
     datastore.put(markerEntity);
 
     response.sendRedirect("/myMap.html");
-  }
-
-  /** Returns the nickname of the user with id, or null if the user has not set a nickname. */
-  private String getUserNickname(String id) {
-    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-    Query query =
-        new Query("UserInfo")
-            .setFilter(new Query.FilterPredicate("id", Query.FilterOperator.EQUAL, id));
-    PreparedQuery results = datastore.prepare(query);
-    Entity entity = results.asSingleEntity();
-    if (entity == null) {
-      return null;
-    }
-    String nickname = (String) entity.getProperty("nickname");
-    return nickname;
   }
 }

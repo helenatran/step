@@ -13,17 +13,28 @@
 // limitations under the License.
 
 document.addEventListener('DOMContentLoaded', async function() {
-  // Initialise the slider (index.html) and the material box (photoGallery.html)
+  initialiseMaterializeElements();
+  loadNavBarFooter();
+  hideCommentSection();
+  hideCommentForm();
+});
+
+/** Initialise the slider (in index.html) and the material box (in photoGallery.html) */
+function initialiseMaterializeElements() {
   const elems_one = document.querySelectorAll('.slider');
   const instances_one = M.Slider.init(elems_one);
   const elems_two = document.querySelectorAll('.materialboxed');
   const instances_two = M.Materialbox.init(elems_two);
+}
 
-  // Load Navigation Bar and Footer when loading page
+/** Load the navbar and footer. */
+function loadNavBarFooter() {
   document.getElementById('navbar-container').innerHTML='<object type="text/html" data="navBar.html" width="100%" height="73"></object>'
   document.getElementById('footer-container').innerHTML='<object type="text/html" data="footer.html" width="100%" height="115"></object>'
+}
 
-  // Hide comment section if there is no comment
+/** Hide comment section if there is no comment. */
+async function hideCommentSection() {
   const commentSectionContainer = document.getElementById('comments-section');
   const comments = await getAllComments();
   if (comments.length === 0) {
@@ -32,8 +43,10 @@ document.addEventListener('DOMContentLoaded', async function() {
   else {
     commentSectionContainer.style.display = 'block';
   }
+}
 
-//   Hide comment form if the user is not logged-in
+/** Hide comment form if the user is not logged-in. */
+async function hideCommentForm() {
   const response = await fetch('/login', {method: 'POST'});
   const isUserLoggedIn = await response.json();
 
@@ -47,11 +60,9 @@ document.addEventListener('DOMContentLoaded', async function() {
     commentFormContainer.style.display = 'none';
     loginRequestContainer.style.display = 'block';
   }
-});
+}
 
-/**
- * Adds a random greeting to the page.
- */
+/** Adds a random greeting to the page. */
 function addRandomGreeting() {
   const greetings =
     ['Hello world!', '¡Hola Mundo!', '你好，世界！', 'Bonjour le monde!'];
@@ -86,9 +97,7 @@ function addRandomFact() {
   factContainer.innerText = fact;
 }
 
-/**
- * Display the 'About Me' section
- */
+/** Display the 'About Me' section. */
 function getAboutMe(aboutMeId) {
   if (aboutMeId === 'hobbies') {
     elemId = 'hobbies-container';
@@ -260,10 +269,31 @@ async function createYourMap() {
   });
 }
 
+/** 
+ * Display the map which allows users to add marker only if they are logged in.
+ * If they are not, prompt them to log in. 
+ */
+async function displayYourMapIfLoggedIn() {
+  const response = await fetch('/login', {method: 'POST'});
+  const isUserLoggedIn = await response.json();
+
+  const mapLoginRequestContainer = document.getElementById('map-login-request');
+  const yourMapContainer = document.getElementById('your-map');
+  if (isUserLoggedIn) {
+    yourMapContainer.style.display = 'block';
+    mapLoginRequestContainer.style.display = 'none';
+  }
+  else {
+    yourMapContainer.style.display = 'none';
+    mapLoginRequestContainer.style.display = 'block';
+  }
+}
+
 /** Load both maps. */
 function loadMaps() {
   createMyMap();
   createYourMap();
+  displayYourMapIfLoggedIn();
 }
 
 /** Adds a marker that shows an info window when clicked. */

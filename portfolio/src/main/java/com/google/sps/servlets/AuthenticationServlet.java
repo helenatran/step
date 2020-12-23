@@ -14,10 +14,10 @@
 
 package com.google.sps.servlets;
 
-import com.google.appengine.api.datastore.*;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
 import com.google.gson.Gson;
+import com.google.sps.data.FunctionsLibrary;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.annotation.WebServlet;
@@ -45,8 +45,8 @@ public class AuthenticationServlet extends HttpServlet {
     }
 
     // If user has not set a nickname, redirect to nickname page.
-    String nickname = getUserNickname(userService.getCurrentUser().getUserId());
-    if (nickname == null) {
+    String nickname = FunctionsLibrary.getUserNickname(userService.getCurrentUser().getUserId());
+    if (nickname == "") {
       response.sendRedirect("/nickname");
       return;
     }
@@ -76,19 +76,4 @@ public class AuthenticationServlet extends HttpServlet {
       response.setContentType("application/json;");
       response.getWriter().println(gson.toJson(isUserLoggedIn));
     }
-
-  /** Returns the nickname of the user with id, or null if the user has not set a nickname. */
-  private String getUserNickname(String id) {
-    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-    Query query =
-        new Query("UserInfo")
-            .setFilter(new Query.FilterPredicate("id", Query.FilterOperator.EQUAL, id));
-    PreparedQuery results = datastore.prepare(query);
-    Entity entity = results.asSingleEntity();
-    if (entity == null) {
-      return null;
-    }
-    String nickname = (String) entity.getProperty("nickname");
-    return nickname;
-  }
 }
