@@ -25,7 +25,22 @@ public final class FindMeetingQuery {
   // Return the possible times at which the meeting be set on the day.
   public Collection<TimeRange> query(Collection<Event> events, MeetingRequest request) {
 
-    if (events.isEmpty() || request.getAttendees().isEmpty()) {
+    // All the possible times to arrange a meeting on the day.
+    List<TimeRange> possibleTimes = new ArrayList<>();
+
+    // All the people who are required to attend the meeting. 
+    Collection<String> requestAttendees = request.getAttendees();
+
+    // All the people whose attendance is optional. 
+    Collection<String> optionalAttendees = request.getOptionalAttendees();
+
+    // Events with required attendees. We assume events are always added in a chronological order. 
+    List<Event> requiredEvents = new ArrayList<>();
+
+    // Events with optional attendees. We assume events are always added in a chronological order. 
+    List<Event> optionalEvents = new ArrayList<>();
+
+    if (events.isEmpty() || (requestAttendees.isEmpty() && optionalAttendees.isEmpty())) {
       // If the request has a meeting's duration longer than a day, there are no possible options.
       if (request.getDuration() > TimeRange.WHOLE_DAY.duration()) {
         return Arrays.asList();
@@ -36,15 +51,6 @@ public final class FindMeetingQuery {
         return Arrays.asList(TimeRange.WHOLE_DAY);
       }
     }
-    
-    // All the possible times to arrange a meeting on the day.
-    List<TimeRange> possibleTimes = new ArrayList<>();
-
-    // All the people who are required to attend the meeting. 
-    Collection<String> requestAttendees = request.getAttendees();
-
-    // Events with required attendees. We assume events are always added in a chronological order. 
-    List<Event> requiredEvents = new ArrayList<>();
 
     for (Event event : events) {
       for (String requiredAttendee : requestAttendees) {
@@ -54,11 +60,21 @@ public final class FindMeetingQuery {
           }
         }
       }
+
+      if (!optionalAttendees.isEmpty()) {
+        for (String optionalAttendee : optionalAttendees) {
+          if (event.getAttendees().contains(optionalAttendee)) {
+            if (!optionalEvents.contains(event)) {
+              optionalEvents.add(event);
+            }
+          }
+        }
+      }
     }
 
-    if (requiredEvents.size() > 0) {
+    if (requiredEvents.size() > 0 || (requiredEvents.isEmpty() && !optionalEvents.isEmpty())) {
       // If there is only 1 event, the possible times are before and after the event. 
-      if (requiredEvents.size() == 1) {
+      if (requiredEvents.size() == 1 || (requiredEvents.isEmpty() && optionalEvents.size() == 1)) {
         Iterator<Event> eventIt = events.iterator();
         Event onlyEvent = eventIt.next();
 
@@ -67,13 +83,24 @@ public final class FindMeetingQuery {
         return possibleTimes;
       }
 
-      for (int counter = 0; counter < requiredEvents.size(); counter++) {
-        Event currentEvent = requiredEvents.get(counter);
+      // Events List chosen to check availabilities. Depends on whether there are mandatory and/or optional attendees.
+      List<Event> chosenEventsList = new ArrayList<>();
+      
+      // If there are no events with mandatory attendees, but only optional attendees, then we should treat the optional events as required events. 
+      if (requiredEvents.isEmpty() && !optionalEvents.isEmpty()) {
+        chosenEventsList = optionalEvents;
+      }
+      else {
+        chosenEventsList = requiredEvents;
+      }
+
+      for (int counter = 0; counter < chosenEventsList.size(); counter++) {
+        Event currentEvent = chosenEventsList.get(counter);
 
         // If the array is not empty, then it means there was one event before this one. 
         if (!possibleTimes.isEmpty()) {
-          Event previousEvent = requiredEvents.get(counter - 1);
-      
+          Event previousEvent = chosenEventsList.get(counter - 1);
+
           // Remove the last added timerange to consider the unavailability due to the current event. 
           possibleTimes.remove(possibleTimes.size() - 1);
 
@@ -83,33 +110,47 @@ public final class FindMeetingQuery {
             possibleTimes.add(TimeRange.fromStartEnd(previousEvent.getWhen().end(), TimeRange.END_OF_DAY, true));
             break;
           }
-          
+
           // If events have no conflict, there are 3 possible times: before the first one, between the 2 events and after the second one.
           if (previousEvent.getWhen().end() < currentEvent.getWhen().start()) {
             // Duration available in between events. 
             long durationBetweenEvents = currentEvent.getWhen().start() - previousEvent.getWhen().end();
-            
+
             // Check if the requested duration matches with the time available in between events. 
             if (request.getDuration() <= durationBetweenEvents) {
-              possibleTimes.add(TimeRange.fromStartEnd(previousEvent.getWhen().end(), currentEvent.getWhen().start(), false));
+              possibleTimes
+                  .add(TimeRange.fromStartEnd(previousEvent.getWhen().end(), currentEvent.getWhen().start(), false));
+            }
+            else if (chosenEventsList == optionalEvents) {
+              possibleTimes.add(TimeRange.WHOLE_DAY);
             }
           }
-          
+
           // If the end of the event is not the end of the day, then the time in between is a possible time. 
           if (currentEvent.getWhen().end() != TimeRange.END_OF_DAY + 1) {
             possibleTimes.add(TimeRange.fromStartEnd(currentEvent.getWhen().end(), TimeRange.END_OF_DAY, true));
           }
-          
+
         }
-        
+
         // If there were no previous times, then this event is the first one of the day. The possible times are before and after the event.
         else {
           // If the first event of the day starts at the beginning of the day, there are no availabilities before it. 
           if (currentEvent.getWhen().start() != TimeRange.START_OF_DAY) {
-            possibleTimes.add(
-                TimeRange.fromStartEnd(TimeRange.START_OF_DAY, currentEvent.getWhen().start(), false));
+            possibleTimes.add(TimeRange.fromStartEnd(TimeRange.START_OF_DAY, currentEvent.getWhen().start(), false));
           }
           possibleTimes.add(TimeRange.fromStartEnd(currentEvent.getWhen().end(), TimeRange.END_OF_DAY, true));
+        }
+      }
+      
+      // Check with optional attendees before returning
+      // 1. Is there optional attendees?
+      // 2. Are their availabilities matching with the possible times? 
+      if (!requiredEvents.isEmpty() && !optionalEvents.isEmpty()) {
+        for (Event optionalEvent : optionalEvents) {
+          if (possibleTimes.contains(optionalEvent.getWhen())) {
+            possibleTimes.remove(optionalEvent.getWhen());
+          }
         }
       }
       return possibleTimes;
