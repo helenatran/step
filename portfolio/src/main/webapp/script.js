@@ -13,17 +13,28 @@
 // limitations under the License.
 
 document.addEventListener('DOMContentLoaded', async function() {
-  // Initialise the slider (index.html) and the material box (photoGallery.html)
+  initialiseMaterializeElements();
+  loadNavBarFooter();
+  hideCommentSection();
+  hideCommentForm();
+});
+
+/** Initialise the slider (in index.html) and the material box (in photoGallery.html) */
+function initialiseMaterializeElements() {
   const elems_one = document.querySelectorAll('.slider');
   const instances_one = M.Slider.init(elems_one);
   const elems_two = document.querySelectorAll('.materialboxed');
   const instances_two = M.Materialbox.init(elems_two);
+}
 
-  // Load Navigation Bar and Footer when loading page
+/** Load the navbar and footer. */
+function loadNavBarFooter() {
   document.getElementById('navbar-container').innerHTML='<object type="text/html" data="navBar.html" width="100%" height="73"></object>'
   document.getElementById('footer-container').innerHTML='<object type="text/html" data="footer.html" width="100%" height="115"></object>'
+}
 
-  // Hide comment section if there is no comment
+/** Hide comment section if there is no comment. */
+async function hideCommentSection() {
   const commentSectionContainer = document.getElementById('comments-section');
   const comments = await getAllComments();
   if (comments.length === 0) {
@@ -32,11 +43,26 @@ document.addEventListener('DOMContentLoaded', async function() {
   else {
     commentSectionContainer.style.display = 'block';
   }
-});
+}
 
-/**
- * Adds a random greeting to the page.
- */
+/** Hide comment form if the user is not logged-in. */
+async function hideCommentForm() {
+  const response = await fetch('/login', {method: 'POST'});
+  const isUserLoggedIn = await response.json();
+
+  const commentFormContainer = document.getElementById('comment-form');
+  const loginRequestContainer = document.getElementById('login-request');
+  if (isUserLoggedIn) {
+    commentFormContainer.style.display = 'block';
+    loginRequestContainer.style.display = 'none';
+  }
+  else {
+    commentFormContainer.style.display = 'none';
+    loginRequestContainer.style.display = 'block';
+  }
+}
+
+/** Adds a random greeting to the page. */
 function addRandomGreeting() {
   const greetings =
     ['Hello world!', '¡Hola Mundo!', '你好，世界！', 'Bonjour le monde!'];
@@ -71,9 +97,7 @@ function addRandomFact() {
   factContainer.innerText = fact;
 }
 
-/**
- * Display the 'About Me' section
- */
+/** Display the 'About Me' section. */
 function getAboutMe(aboutMeId) {
   if (aboutMeId === 'hobbies') {
     elemId = 'hobbies-container';
@@ -144,6 +168,9 @@ function createCommentElement(comment) {
   const usernameElement = document.createElement('p');
   usernameElement.innerText = "Username: " + comment.username;
 
+  const emailElement = document.createElement('p');
+  emailElement.innerText = "Email: " + comment.email;
+
   const commentTextElement = document.createElement('p');
   commentTextElement.innerText = "Comment: " + comment.commentText;
 
@@ -161,6 +188,7 @@ function createCommentElement(comment) {
   commentElement.appendChild(subDivElement);
   subDivElement.appendChild(lastDivElement);
   lastDivElement.appendChild(usernameElement);
+  lastDivElement.appendChild(emailElement);
   lastDivElement.appendChild(commentTextElement);
   lastDivElement.appendChild(deleteButtonElement);
 
@@ -198,4 +226,158 @@ async function getAllComments() {
   const response = await fetch('/data');
   const comments = await response.json();
   return comments;
+}
+
+/** Redirect the user to the login page. */
+function logIn() {
+  window.location.href = '/login';
+}
+
+/** Creates my map and add it to the page. */
+async function createMyMap() {
+  const response = await fetch('/map-data');
+  const mapMarkers = await response.json();
+
+  const map = new google.maps.Map(
+      document.getElementById('my-map'),
+      {center: {lat: -33.8783, lng: 151.1850}, zoom: 13});
+  
+  mapMarkers.forEach((marker) => {
+    addMarker(map, marker.lat, marker.lng, marker.title, marker.description);
+  })
+}
+
+// Initialise the map for the user to add markers
+let yourMap;
+
+/** Creates a map for the other users and add it to the page. */
+async function createYourMap() {
+  yourMap = new google.maps.Map(
+    document.getElementById('your-map'),
+    {center: {lat: -33.8783, lng: 151.1850}, zoom: 13});
+
+  // When the user clicks in the map, show a marker with a text box the user can edit.
+  yourMap.addListener('click', (event) => {
+    createMarkerForEdit(event.latLng.lat(), event.latLng.lng());
+  });
+  
+  const response = await fetch('/your-map-data');
+  const mapMarkers = await response.json();
+
+  mapMarkers.forEach((marker) => {
+    addMarker(yourMap, marker.lat, marker.lng, marker.title, marker.description);
+  });
+}
+
+/** 
+ * Display the map which allows users to add marker only if they are logged in.
+ * If they are not, prompt them to log in. 
+ */
+async function displayYourMapIfLoggedIn() {
+  const response = await fetch('/login', {method: 'POST'});
+  const isUserLoggedIn = await response.json();
+
+  const mapLoginRequestContainer = document.getElementById('map-login-request');
+  const yourMapContainer = document.getElementById('your-map');
+  if (isUserLoggedIn) {
+    yourMapContainer.style.display = 'block';
+    mapLoginRequestContainer.style.display = 'none';
+  }
+  else {
+    yourMapContainer.style.display = 'none';
+    mapLoginRequestContainer.style.display = 'block';
+  }
+}
+
+/** Load both maps. */
+function loadMaps() {
+  createMyMap();
+  createYourMap();
+  displayYourMapIfLoggedIn();
+}
+
+/** Adds a marker that shows an info window when clicked. */
+function addMarker(map, lat, lng, title, description) {
+  const marker = new google.maps.Marker(
+      {position: {lat: lat, lng: lng}, map: map, title: title});
+  
+  const infoWindowContent = createInfoWindow(title, description);
+  const infoWindow = new google.maps.InfoWindow({content: infoWindowContent});
+  marker.addListener('click', () => {
+    infoWindow.open(map, marker);
+  });
+}
+
+/** Creates an element that represents the content of an info window. */
+function createInfoWindow(title, description) {
+  const divElement = document.createElement('div');
+
+  const titleElement = document.createElement('h6');
+  titleElement.innerText = title;
+
+  const descriptionElement = document.createElement('p');
+  descriptionElement.innerText = description;
+
+  divElement.appendChild(titleElement);
+  divElement.appendChild(descriptionElement);
+
+  return divElement;
+
+}
+
+/* Editable marker that displays when a user clicks in the map. */
+let editMarker;
+
+/** Creates a marker that shows a textbox the user can edit. */
+function createMarkerForEdit(lat, lng) {
+  // If we're already showing an editable marker, then remove it.
+  if (editMarker) {
+    editMarker.setMap(null);
+  }
+
+  editMarker =
+      new google.maps.Marker({position: {lat: lat, lng: lng}, map: yourMap});
+
+  const infoWindow =
+      new google.maps.InfoWindow({content: buildInfoWindowInput(lat, lng)});
+
+  // When the user closes the editable info window, remove the marker.
+  google.maps.event.addListener(infoWindow, 'closeclick', () => {
+    editMarker.setMap(null);
+  });
+
+  infoWindow.open(yourMap, editMarker);
+}
+
+/**
+ * Builds and returns HTML elements that show an editable textbox and a submit
+ * button.
+ */
+function buildInfoWindowInput(lat, lng) {
+  const textBoxElement = document.createElement('textarea');
+  const buttonElement = document.createElement('button');
+  buttonElement.appendChild(document.createTextNode('Submit'));
+  
+  buttonElement.onclick = () => {
+    postMarker(lat, lng, textBoxElement.value);
+    addMarker(yourMap, lat, lng, '', textBoxElement.value);
+    editMarker.setMap(null);
+  };
+
+  const containerDiv = document.createElement('div');
+  containerDiv.appendChild(textBoxElement);
+  containerDiv.appendChild(document.createElement('br'));
+  containerDiv.appendChild(buttonElement);
+
+  return containerDiv;
+}
+
+/** Sends a marker to the backend for saving. */
+function postMarker(lat, lng, description) {
+  const params = new URLSearchParams();
+  params.append('lat', lat);
+  params.append('lng', lng);
+  params.append('description', description);
+
+  fetch('/your-map-data', {method: 'POST', body: params});
 }

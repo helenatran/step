@@ -8,11 +8,15 @@ h4 {
 }
 
 .content {
-    background-color: #f48fb1;
+  background-color: #f48fb1;
 }
 
 #navbar-container {
-    height: 64px;
+  height: 64px;
+}
+
+#nav-mobile {
+  list-style-type: none;
 }
 
 .column {
@@ -125,4 +129,18 @@ h5 {
 
 #deleteAll-button-container {
     margin-top: 15px;
+}
+
+#my-map, #your-map {
+  border: thin solid black;
+  height: 500px;
+  width: 100%;
+}
+
+#map-page-content {
+  margin: 20px 80px;
+}
+
+h6 {
+  font-weight: bold;
 }

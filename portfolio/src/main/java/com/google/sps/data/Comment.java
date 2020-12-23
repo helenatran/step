@@ -19,18 +19,21 @@ public final class Comment {
 
   private final long id;
   private final String username;
+  private final String email;
   private final String commentText;
   private final long timestamp;
 
   /** Create a new comment. 
    *  @params id            the id the of the comment.
    *  @params username      the username of the person adding the comment.
+   *  @params email         the email of the logged-in user who is posting the comment.
    *  @params commentText   the text of the comment.
    *  @params timestamp     the timestamp at which the comment has been created.
   */
-  public Comment(long id, String username, String commentText, long timestamp) {
+  public Comment(long id, String username, String email, String commentText, long timestamp) {
     this.id = id;
     this.username = username;
+    this.email = email;
     this.commentText = commentText;
     this.timestamp = timestamp;
   }

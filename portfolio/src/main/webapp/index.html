@@ -114,9 +114,16 @@
             <i class="material-icons">insert_emoticon</i>
           </span>
         </h4>
-        <form action="/data" method="POST">
-          <label for="username">Name </label>
-          <input id="username" type="text" name="username">
+        <div id="login-request" style="display:none">
+          <p>You must login before posting a comment:  
+            <span>
+              <button class="waves-effect waves-light btn-small pink lighten-3" onClick="logIn()">Login
+              <i class="material-icons right">account_box</i>
+              </button>
+            </span>
+          </p>
+        </div>
+        <form id="comment-form" action="/data" method="POST" style="display:none">
           <label for="commentText">Comment </label>
           <textarea id="commentText" name="commentText" class="materialize-textarea"></textarea>
           <br/>
