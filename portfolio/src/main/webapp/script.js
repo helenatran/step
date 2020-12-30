@@ -169,10 +169,11 @@ function createCommentElement(comment) {
   usernameElement.innerText = "Username: " + comment.username;
 
   const emailElement = document.createElement('p');
-  emailElement.innerText = "Email: " + comment.email;
+  emailElement.innerText = 'Email: ' + comment.email;
 
   const commentTextElement = document.createElement('p');
-  commentTextElement.innerText = "Comment: " + comment.commentText;
+  commentTextElement.innerText = 'Comment: ' + comment.commentText;
+    // + ' (' + comment.sentimentScore + ')';
 
   const deleteButtonElement = document.createElement('a');
   deleteButtonElement.className = 'waves-effect waves-light btn-small pink lighten-3';
@@ -226,11 +227,6 @@ async function getAllComments() {
   const response = await fetch('/data');
   const comments = await response.json();
   return comments;
-}
-
-/** Redirect the user to the login page. */
-function logIn() {
-  window.location.href = '/login';
 }
 
 /** Creates my map and add it to the page. */

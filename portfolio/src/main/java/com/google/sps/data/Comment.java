@@ -21,6 +21,7 @@ public final class Comment {
   private final String username;
   private final String email;
   private final String commentText;
+  private final double sentimentScore;
   private final long timestamp;
 
   /** Create a new comment. 
@@ -30,11 +31,12 @@ public final class Comment {
    *  @params commentText   the text of the comment.
    *  @params timestamp     the timestamp at which the comment has been created.
   */
-  public Comment(long id, String username, String email, String commentText, long timestamp) {
+  public Comment(long id, String username, String email, String commentText, double sentimentScore, long timestamp) {
     this.id = id;
     this.username = username;
     this.email = email;
     this.commentText = commentText;
+    this.sentimentScore = sentimentScore;
     this.timestamp = timestamp;
   }
 }
