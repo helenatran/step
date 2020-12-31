@@ -143,9 +143,8 @@ public final class FindMeetingQuery {
         else if (optionalAttendeesTimerange.contains(requiredAttendeesTimerange.end()) && requiredAttendeesTimerange.contains(optionalAttendeesTimerange.start())) {
           TimeRange commonTime = TimeRange.fromStartEnd(optionalAttendeesTimerange.start(), requiredAttendeesTimerange.end(), false);
           
-          // If there are more than 1 'required' events, then the availabilities for required attendees include in-between these events.
-          // If this in-between availability is bigger than the optional availability, then we ignore the latter. 
-          if (eventsWithRequiredAttendees.size() > 1 && commonTime.duration() < requiredAttendeesTimerange.duration())
+          // If the availability after considering optional attendees is smaller than the requested duration, ignore optional attendees. 
+          if (commonTime.duration() < request.getDuration())
             commonAvailabilities.add(requiredAttendeesTimerange);
           else 
             commonAvailabilities.add(commonTime);
