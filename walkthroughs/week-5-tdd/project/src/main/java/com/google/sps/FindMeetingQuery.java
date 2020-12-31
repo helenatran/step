@@ -89,8 +89,7 @@ public final class FindMeetingQuery {
         availableTimes.remove(availableTimes.size() - 1);
 
         // If one event fully contains another (nested event), there are 2 possible times: before and after the longest event. 
-        if (previousEvent.getWhen().end() > currentEvent.getWhen().start()
-            && previousEvent.getWhen().end() > currentEvent.getWhen().end()) {
+        if (previousEvent.getWhen().contains(currentEvent.getWhen())) {
           addTimerange(availableTimes, TimeRange.fromStartEnd(previousEvent.getWhen().end(), TimeRange.END_OF_DAY, true), request);
           break;
         }
