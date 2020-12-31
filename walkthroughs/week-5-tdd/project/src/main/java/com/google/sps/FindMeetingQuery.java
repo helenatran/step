@@ -126,15 +126,20 @@ public final class FindMeetingQuery {
     Collection<TimeRange> optionalAttendeesAvailabilities = getPossibleTimes(eventsWithOptionalAttendees, request);
     Collection<TimeRange> commonAvailabilities = new ArrayList<>();
 
-    if (optionalAttendeesAvailabilities.isEmpty())
-      return requiredAttendeesAvailabilities;
+    // if (optionalAttendeesAvailabilities.isEmpty())
+    //   return requiredAttendeesAvailabilities;
 
     for (TimeRange requiredAttendeesTimerange : requiredAttendeesAvailabilities) {
       for (TimeRange optionalAttendeesTimerange : optionalAttendeesAvailabilities) {
-        if (requiredAttendeesTimerange.overlaps(optionalAttendeesTimerange))
+        if (optionalAttendeesTimerange.contains(requiredAttendeesTimerange))
           commonAvailabilities.add(requiredAttendeesTimerange);
+        else if (requiredAttendeesTimerange.contains(optionalAttendeesTimerange))
+          commonAvailabilities.add(optionalAttendeesTimerange);
       }
     }
+
+    if (commonAvailabilities.isEmpty())
+      return requiredAttendeesAvailabilities;
 
     return commonAvailabilities;
   }
