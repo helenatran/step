@@ -217,6 +217,28 @@ public final class FindMeetingQueryTest {
   }
 
   @Test
+  public void overlappingEventsWithOptional() {
+    // Have an event for each person (one optional and one mandatory attendee), but have their events overlap. We should only see two options, similar as for overlappingEvents() 
+    //
+    // Events  :       |--A--|
+    //                     |--B--|
+    // Day     : |---------------------|
+    // Options : |--1--|         |--2--|
+    Collection<Event> events = Arrays.asList(
+        new Event("Event 1", TimeRange.fromStartDuration(TIME_0830AM, DURATION_60_MINUTES), Arrays.asList(PERSON_A)),
+        new Event("Event 2", TimeRange.fromStartDuration(TIME_0900AM, DURATION_60_MINUTES), Arrays.asList(PERSON_B)));
+
+    MeetingRequest request = new MeetingRequest(Arrays.asList(PERSON_A), DURATION_30_MINUTES);
+    request.addOptionalAttendee(PERSON_B);
+
+    Collection<TimeRange> actual = query.query(events, request);
+    Collection<TimeRange> expected = Arrays.asList(TimeRange.fromStartEnd(TimeRange.START_OF_DAY, TIME_0830AM, false),
+        TimeRange.fromStartEnd(TIME_1000AM, TimeRange.END_OF_DAY, true));
+
+    Assert.assertEquals(expected, actual);
+  }
+
+  @Test
   public void nestedEvents() {
     // Have an event for each person, but have one person's event fully contain another's event. We
     // should see two options.
@@ -300,6 +322,52 @@ public final class FindMeetingQueryTest {
         new Event("Event 2", TimeRange.fromStartEnd(TIME_0900AM, TimeRange.END_OF_DAY, true), Arrays.asList(PERSON_A)));
     events.add(
         new Event("Event 3", TimeRange.fromStartDuration(TIME_0830AM, DURATION_15_MINUTES), Arrays.asList(PERSON_B)));
+
+    MeetingRequest request = new MeetingRequest(Arrays.asList(PERSON_A), DURATION_30_MINUTES);
+    request.addOptionalAttendee(PERSON_B);
+
+    Collection<TimeRange> actual = query.query(events, request);
+    Collection<TimeRange> expected = Arrays.asList(TimeRange.fromStartDuration(TIME_0830AM, DURATION_30_MINUTES));
+
+    Assert.assertEquals(expected, actual);
+  }
+
+  @Test
+  public void justEnoughRoomOptionalAndRequired() {
+    // Similar scenario as justEnoughRoom() except that, now, the second event is of an optional attendee. We should still see the same available time slot
+    // as for justEnoughRoom() since we want their common available times. 
+    //
+    // Events  : |--A--|    |----B----|
+    // Day     : |--------------------|
+    // Options :       |----|
+
+    Collection<Event> events = Arrays.asList(
+        new Event("Event 1", TimeRange.fromStartEnd(TimeRange.START_OF_DAY, TIME_0830AM, false),
+            Arrays.asList(PERSON_A)),
+        new Event("Event 2", TimeRange.fromStartEnd(TIME_0900AM, TimeRange.END_OF_DAY, true), Arrays.asList(PERSON_B)));
+
+    MeetingRequest request = new MeetingRequest(Arrays.asList(PERSON_A), DURATION_30_MINUTES);
+    request.addOptionalAttendee(PERSON_B);
+
+    Collection<TimeRange> actual = query.query(events, request);
+    Collection<TimeRange> expected = Arrays.asList(TimeRange.fromStartDuration(TIME_0830AM, DURATION_30_MINUTES));
+
+    Assert.assertEquals(expected, actual);
+  }
+
+  @Test
+  public void justEnoughRoomOptionalAndRequiredOpposite() {
+    // Same scenario as justEnoughRoomOptionalAndRequired() but the other way around (first the optional attendee then the mandatory one). We should still see the same available time slot
+    // since we want their common available times. 
+    //
+    // Events  : |--B--|    |----A----|
+    // Day     : |--------------------|
+    // Options :       |----|
+
+    Collection<Event> events = Arrays.asList(
+        new Event("Event 1", TimeRange.fromStartEnd(TimeRange.START_OF_DAY, TIME_0830AM, false),
+            Arrays.asList(PERSON_B)),
+        new Event("Event 2", TimeRange.fromStartEnd(TIME_0900AM, TimeRange.END_OF_DAY, true), Arrays.asList(PERSON_A)));
 
     MeetingRequest request = new MeetingRequest(Arrays.asList(PERSON_A), DURATION_30_MINUTES);
     request.addOptionalAttendee(PERSON_B);

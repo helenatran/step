@@ -27,8 +27,7 @@ public class Greeter {
   }
 
   /**
-   * Returns non-alphanumeric characters from a string.
-   * @params string   the string to which we want to remove the non-alphanumeric characters.
+   * Returns non-alphanumeric characters from a given string.
    */
   public static String removeNonAlphanumeric(String string) {
     // Remove every characters which are not alphanumeric
