@@ -22,6 +22,16 @@ public class Greeter {
    * Returns a greeting for the given name.
    */
   public String greet(String name) {
-    return "Hello " + name;
+    name = removeNonAlphanumeric(name);
+    return "Hello " + name.trim();
+  }
+
+  /**
+   * Returns non-alphanumeric characters from a given string.
+   */
+  public static String removeNonAlphanumeric(String string) {
+    // Remove every characters which are not alphanumeric
+    string = string.replaceAll("[^a-zA-Z0-9]", "");
+    return string;
   }
 }
