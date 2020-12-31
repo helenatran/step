@@ -126,15 +126,30 @@ public final class FindMeetingQuery {
     Collection<TimeRange> optionalAttendeesAvailabilities = getPossibleTimes(eventsWithOptionalAttendees, request);
     Collection<TimeRange> commonAvailabilities = new ArrayList<>();
 
-    // if (optionalAttendeesAvailabilities.isEmpty())
-    //   return requiredAttendeesAvailabilities;
-
     for (TimeRange requiredAttendeesTimerange : requiredAttendeesAvailabilities) {
       for (TimeRange optionalAttendeesTimerange : optionalAttendeesAvailabilities) {
+
         if (optionalAttendeesTimerange.contains(requiredAttendeesTimerange))
           commonAvailabilities.add(requiredAttendeesTimerange);
-        else if (requiredAttendeesTimerange.contains(optionalAttendeesTimerange))
+
+        else if (requiredAttendeesTimerange.contains(optionalAttendeesTimerange)) {
           commonAvailabilities.add(optionalAttendeesTimerange);
+        }
+          
+        // Get the intersection between required and optional attendees' availabilities
+        else if (optionalAttendeesTimerange.contains(requiredAttendeesTimerange.start()) && requiredAttendeesTimerange.contains(optionalAttendeesTimerange.end()))
+          commonAvailabilities.add(TimeRange.fromStartEnd(requiredAttendeesTimerange.start(), optionalAttendeesTimerange.end(), false));
+          
+        else if (optionalAttendeesTimerange.contains(requiredAttendeesTimerange.end()) && requiredAttendeesTimerange.contains(optionalAttendeesTimerange.start())) {
+          TimeRange commonTime = TimeRange.fromStartEnd(optionalAttendeesTimerange.start(), requiredAttendeesTimerange.end(), false);
+          
+          // If there are more than 1 'required' events, then the availabilities for required attendees include in-between these events.
+          // If this in-between availabilities is bigger than the one provided considering the optional attendee, then we ignore the optional availability. 
+          if (eventsWithRequiredAttendees.size() > 1 && commonTime.duration() < requiredAttendeesTimerange.duration())
+            commonAvailabilities.add(requiredAttendeesTimerange);
+          else 
+            commonAvailabilities.add(commonTime);
+        }
       }
     }
 
