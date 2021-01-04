@@ -195,6 +195,11 @@ function createCommentElement(comment) {
   return commentElement;
 }
 
+/** Redirect the user to the login page. */
+function logIn() {
+  window.location.href = '/login';
+}	
+
 /** Tells the server to delete the comment. */
 function deleteComment(comment) {
   const params = new URLSearchParams();
