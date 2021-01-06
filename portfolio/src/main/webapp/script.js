@@ -387,23 +387,27 @@ google.charts.setOnLoadCallback(drawChart);
 
 /** Creates a chart and adds it to the page. */
 function drawChart() {
-  var container = document.getElementById('chart-container');
-  var chart = new google.visualization.Timeline(container);
-  var dataTable = new google.visualization.DataTable();
+  let container = document.getElementById('chart-container');
+  let chart = new google.visualization.Timeline(container);
+  let dataTable = new google.visualization.DataTable();
 
-  dataTable.addColumn({ type: 'string', id: 'ProjectNumber' });
-  dataTable.addColumn({ type: 'string', id: 'ProjectName' });
-  dataTable.addColumn({ type: 'date', id: 'Start' });
-  dataTable.addColumn({ type: 'date', id: 'End' });
-  dataTable.addRows([
+  const rows = [
     [ '1', 'Movie Kiosk Software',          new Date(2018, 2, 1),  new Date(2018, 5, 1) ],
     [ '2', 'Directed Graph Structure',      new Date(2019, 2, 1),  new Date(2019, 5, 1) ],
     [ '3', 'E-shop - Computer devices',     new Date(2019, 6, 1),  new Date(2019, 9, 1) ],
     [ '4', 'Electrical Forecast Database',  new Date(2020, 2, 1),  new Date(2020, 5, 1) ],
     [ '5', 'E-Library System',              new Date(2020, 6, 1),  new Date(2020, 9, 1) ],
-    [ '6', 'IOU - favour exchange',         new Date(2020, 6, 1),  new Date(2020, 9, 1) ]]);
+    [ '6', 'IOU - favour exchange',         new Date(2020, 6, 1),  new Date(2020, 9, 1) ]
+  ]
 
-  var options = {
+  dataTable.addColumn({ type: 'string', id: 'ProjectNumber' });
+  dataTable.addColumn({ type: 'string', id: 'ProjectName' });
+  dataTable.addColumn({ type: 'date', id: 'Start' });
+  dataTable.addColumn({ type: 'date', id: 'End' });
+  dataTable.addRows(rows);
+
+  let options = {
+    height: 285,
     timeline: { showRowLabels: false }
   };
 
