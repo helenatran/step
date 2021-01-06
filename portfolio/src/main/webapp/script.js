@@ -12,6 +12,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+const PROJECT_CHART_ROWS = [
+  [ '1', 'Movie Kiosk Software',          new Date(2018, 2, 1),  new Date(2018, 5, 1) ],
+  [ '2', 'Directed Graph Structure',      new Date(2019, 2, 1),  new Date(2019, 5, 1) ],
+  [ '3', 'E-shop - Computer devices',     new Date(2019, 6, 1),  new Date(2019, 9, 1) ],
+  [ '4', 'Electrical Forecast Database',  new Date(2020, 2, 1),  new Date(2020, 5, 1) ],
+  [ '5', 'E-Library System',              new Date(2020, 6, 1),  new Date(2020, 9, 1) ],
+  [ '6', 'IOU - favour exchange',         new Date(2020, 6, 1),  new Date(2020, 9, 1) ]
+]
+
 document.addEventListener('DOMContentLoaded', async function() {
   initialiseMaterializeElements();
   loadNavBarFooter();
@@ -391,20 +400,11 @@ function drawChart() {
   let chart = new google.visualization.Timeline(container);
   let dataTable = new google.visualization.DataTable();
 
-  const rows = [
-    [ '1', 'Movie Kiosk Software',          new Date(2018, 2, 1),  new Date(2018, 5, 1) ],
-    [ '2', 'Directed Graph Structure',      new Date(2019, 2, 1),  new Date(2019, 5, 1) ],
-    [ '3', 'E-shop - Computer devices',     new Date(2019, 6, 1),  new Date(2019, 9, 1) ],
-    [ '4', 'Electrical Forecast Database',  new Date(2020, 2, 1),  new Date(2020, 5, 1) ],
-    [ '5', 'E-Library System',              new Date(2020, 6, 1),  new Date(2020, 9, 1) ],
-    [ '6', 'IOU - favour exchange',         new Date(2020, 6, 1),  new Date(2020, 9, 1) ]
-  ]
-
   dataTable.addColumn({ type: 'string', id: 'ProjectNumber' });
   dataTable.addColumn({ type: 'string', id: 'ProjectName' });
   dataTable.addColumn({ type: 'date', id: 'Start' });
   dataTable.addColumn({ type: 'date', id: 'End' });
-  dataTable.addRows(rows);
+  dataTable.addRows(PROJECT_CHART_ROWS);
 
   let options = {
     height: 285,
