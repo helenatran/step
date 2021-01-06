@@ -12,6 +12,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+const PROJECT_CHART_ROWS = [
+  ['1', 'Movie Kiosk Software', new Date(2018, 2, 1), new Date(2018, 5, 1)],
+  ['2', 'Directed Graph Structure', new Date(2019, 2, 1), new Date(2019, 5, 1)],
+  ['3', 'E-shop - Computer devices', new Date(2019, 6, 1), new Date(2019, 9, 1)],
+  ['4', 'Electrical Forecast Database', new Date(2020, 2, 1), new Date(2020, 5, 1)],
+  ['5', 'E-Library System', new Date(2020, 6, 1), new Date(2020, 9, 1)],
+  ['6', 'IOU - favour exchange', new Date(2020, 6, 1), new Date(2020, 9, 1)]
+];
+
 document.addEventListener('DOMContentLoaded', async function() {
   initialiseMaterializeElements();
   loadNavBarFooter();
@@ -169,10 +178,10 @@ function createCommentElement(comment) {
   usernameElement.innerText = "Username: " + comment.username;
 
   const emailElement = document.createElement('p');
-  emailElement.innerText = "Email: " + comment.email;
+  emailElement.innerText = 'Email: ' + comment.email;
 
   const commentTextElement = document.createElement('p');
-  commentTextElement.innerText = "Comment: " + comment.commentText;
+  commentTextElement.innerText = 'Comment: ' + comment.commentText + ' (' + comment.sentimentScore.toFixed(2) + ')';
 
   const deleteButtonElement = document.createElement('a');
   deleteButtonElement.className = 'waves-effect waves-light btn-small pink lighten-3';
@@ -194,6 +203,11 @@ function createCommentElement(comment) {
 
   return commentElement;
 }
+
+/** Redirect the user to the login page. */
+function logIn() {
+  window.location.href = '/login';
+}	
 
 /** Tells the server to delete the comment. */
 function deleteComment(comment) {
@@ -226,11 +240,6 @@ async function getAllComments() {
   const response = await fetch('/data');
   const comments = await response.json();
   return comments;
-}
-
-/** Redirect the user to the login page. */
-function logIn() {
-  window.location.href = '/login';
 }
 
 /** Creates my map and add it to the page. */
@@ -380,4 +389,27 @@ function postMarker(lat, lng, description) {
   params.append('description', description);
 
   fetch('/your-map-data', {method: 'POST', body: params});
+}
+
+google.charts.load('current', {'packages':['timeline']});
+google.charts.setOnLoadCallback(drawChart);
+
+/** Creates a chart and adds it to the page. */
+function drawChart() {
+  let container = document.getElementById('chart-container');
+  let chart = new google.visualization.Timeline(container);
+  let dataTable = new google.visualization.DataTable();
+
+  dataTable.addColumn({ type: 'string', id: 'ProjectNumber' });
+  dataTable.addColumn({ type: 'string', id: 'ProjectName' });
+  dataTable.addColumn({ type: 'date', id: 'Start' });
+  dataTable.addColumn({ type: 'date', id: 'End' });
+  dataTable.addRows(PROJECT_CHART_ROWS);
+
+  let options = {
+    height: 285,
+    timeline: { showRowLabels: false }
+  };
+
+  chart.draw(dataTable, options);
 }

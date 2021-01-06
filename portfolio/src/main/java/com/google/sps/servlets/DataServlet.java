@@ -22,6 +22,9 @@ import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.Query.SortDirection;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
+import com.google.cloud.language.v1.Document;
+import com.google.cloud.language.v1.LanguageServiceClient;
+import com.google.cloud.language.v1.Sentiment;
 import com.google.gson.Gson;
 import com.google.sps.data.Comment;
 import com.google.sps.data.FunctionsLibrary;
@@ -66,9 +69,10 @@ public class DataServlet extends HttpServlet {
       String username = (String) entity.getProperty("username");
       String email = (String) entity.getProperty("email");
       String commentText = (String) entity.getProperty("commentText");
+      double sentimentScore = (double) entity.getProperty("sentimentScore");
       long timestamp = (long) entity.getProperty("timestamp");
 
-      Comment comment = new Comment(id, username, email, commentText, timestamp);
+      Comment comment = new Comment(id, username, email, commentText, sentimentScore, timestamp);
       comments.add(comment);
     }
 
@@ -94,10 +98,18 @@ public class DataServlet extends HttpServlet {
     String commentText = request.getParameter("commentText");
     long timestamp = System.currentTimeMillis();
 
+    Document doc =
+        Document.newBuilder().setContent(commentText).setType(Document.Type.PLAIN_TEXT).build();
+    LanguageServiceClient languageService = LanguageServiceClient.create();
+    Sentiment sentiment = languageService.analyzeSentiment(doc).getDocumentSentiment();
+    double sentimentScore = sentiment.getScore();
+    languageService.close();
+
     Entity commentEntity = new Entity("Comment");
     commentEntity.setProperty("username", username);
     commentEntity.setProperty("email", email);
     commentEntity.setProperty("commentText", commentText);
+    commentEntity.setProperty("sentimentScore", sentimentScore);
     commentEntity.setProperty("timestamp", timestamp);
 
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();

@@ -21,20 +21,23 @@ public final class Comment {
   private final String username;
   private final String email;
   private final String commentText;
+  private final double sentimentScore;
   private final long timestamp;
 
   /** Create a new comment. 
-   *  @params id            the id the of the comment.
-   *  @params username      the username of the person adding the comment.
-   *  @params email         the email of the logged-in user who is posting the comment.
-   *  @params commentText   the text of the comment.
-   *  @params timestamp     the timestamp at which the comment has been created.
+   *  @param id             the id the of the comment.
+   *  @param username       the username of the person adding the comment.
+   *  @param email          the email of the logged-in user who is posting the comment.
+   *  @param sentimentScore the score of the comment from sentiment analysis. 
+   *  @param commentText    the text of the comment.
+   *  @param timestamp      the timestamp at which the comment has been created.
   */
-  public Comment(long id, String username, String email, String commentText, long timestamp) {
+  public Comment(long id, String username, String email, String commentText, double sentimentScore, long timestamp) {
     this.id = id;
     this.username = username;
     this.email = email;
     this.commentText = commentText;
+    this.sentimentScore = sentimentScore;
     this.timestamp = timestamp;
   }
 }

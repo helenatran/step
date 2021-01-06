@@ -144,3 +144,8 @@ h5 {
 h6 {
   font-weight: bold;
 }
+
+ul.collection.with-header.z-depth-3 {
+  list-style: none;
+  padding-inline-start: inherit;
+}
