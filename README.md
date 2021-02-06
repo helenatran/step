@@ -1,1 +1,2 @@
-This repo contains Helena's portfolio and STEP projects.
+This repository contains Helena's portfolio and STEP projects.
+These were done as part of the STEP (Student Training Engineering Program) internship at Google happened during the Summer 2020-2021. 
